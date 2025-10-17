@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Server Rules - Street Life: Roleplay</title>
+  <link rel="icon" href="https://i.imgur.com/aOZb91M.png"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* Reset and Base Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary-black: #0a0a0a;
+      --secondary-black: #1a1a1a;
+      --dark-gray: #2a2a2a;
+      --medium-gray: #404040;
+      --light-gray: #808080;
+      --text-white: #ffffff;
+      --text-light: #e0e0e0;
+      --accent-color: #8b959b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--primary-black);
+      color: var(--text-white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #171515; }
+    ::-webkit-scrollbar-thumb { background: #404244; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #6f6f6f; }
+
+    /* Navigation */
+    .navbar {
+      position: fixed; top: 0; width: 100%;
+      padding: 0rem 1rem;
+      backdrop-filter: blur(1px); z-index: 1000; transition: all .3s ease;
+      background: rgba(10, 10, 10, 0.98);
+    }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+    .logo img { height: 60px; width: auto; transition: transform .3s ease; }
+    .logo img:hover { transform: scale(1.05); }
+    .nav-links { display: flex; list-style: none; gap: 2rem; }
+    .nav-links a {
+      color: var(--text-light); text-decoration: none; font-weight: 400; transition: all .3s ease; position: relative;
+    }
+    .nav-links a:hover { color: var(--text-white); }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--text-white); transition: width .3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .mobile-menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
+    .mobile-menu-toggle span { width: 25px; height: 3px; background: var(--text-white); transition: all .3s ease; }
+
+    /* Hero Section */
+    .hero {
+      height: 40vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative;
+      background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.8)), url('https://ext.same-assets.com/1146120813/679993928.gif');
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      margin-top: 80px;
+    }
+    .hero-content { max-width: 800px; padding: 0 2rem; }
+    .hero-title {
+      font-family: 'Jost', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 600; margin-bottom: 1rem;
+      color: var(--text-white); letter-spacing: 4px; text-shadow: 2px 2px 5px rgba(0,0,0,.8); text-transform: uppercase;
+    }
+    .hero-subtitle {
+      font-family: 'Jost', sans-serif; font-size: clamp(1rem, 3vw, 1.5rem); font-weight: 500; color: var(--light-gray);
+      margin-bottom: 3rem; letter-spacing: 1px;
+    }
+
+    /* Rules Section */
+    .rules-section {
+      padding: 5rem 0;
+      background: var(--secondary-black);
+    }
+    
+    .rules-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    
+    .section-label {
+      color: #666;
+      font-size: .8rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    
+    .section-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      line-height: 1.2;
+      color: var(--text-white);
+    }
+    
+    .section-title.accent { 
+      color: var(--accent-color); 
+    }
+    
+    .rules-categories {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .rules-category {
+      background: var(--primary-black);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.3);
+      border: 1px solid var(--medium-gray);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .rules-category:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,.5);
+    }
+    
+    .category-header {
+      background: var(--dark-gray);
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--medium-gray);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .category-header h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-white);
+      margin: 0;
+    }
+    
+    .category-toggle {
+      font-size: 1.5rem;
+      color: var(--text-light);
+      transition: transform 0.3s ease;
+    }
+    
+    .category-content {
+      padding: 2rem;
+      display: none;
+    }
+    
+    .category-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .rules-list {
+      list-style: none;
+    }
+    
+    .rules-list li {
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-light);
+      position: relative;
+      padding-left: 2rem;
+    }
+    
+    .rules-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .rules-list li:before {
+      content: "•";
+      color: var(--accent-color);
+      position: absolute;
+      left: 0;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    
+    .rule-penalty {
+      display: inline-block;
+      background: rgba(139, 149, 155, 0.2);
+      color: var(--accent-color);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-left: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .rules-important {
+      background: rgba(139, 149, 155, 0.1);
+      border-left: 4px solid var(--accent-color);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 4px;
+    }
+    
+    .rules-important h4 {
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    
+    .rules-important p {
+      color: var(--text-light);
+      margin: 0;
+    }
+    
+    /* Footer */
+    .footer { background: var(--primary-black); border-top: 1px solid rgba(64,66,68,.2); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; padding: 3rem 0; }
+    .footer-title { color: #fff; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 600; }
+    .footer-heading { color: #fff; font-size: 1rem; margin-bottom: 1rem; font-weight: 600; }
+    .footer-text { color: #888; font-size: .9rem; line-height: 1.5; margin-bottom: 1rem; }
+    .footer-contact { color: #888; font-size: .9rem; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: .5rem; }
+    .footer-links a { color: #888; text-decoration: none; font-size: .9rem; transition: color .3s ease; }
+    .footer-links a:hover { color: #fff; }
+    .social-links { display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .social-link {
+      display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #888; text-decoration: none; transition: all .3s ease; font-size: 1.2rem;
+    }
+    .social-link:hover { background: #3a3a3a; color: #fff; border-color: #666; }
+    .social-link img { width: 20px; height: 20px; }
+    .footer-bottom { text-align: center; padding: 1.5rem 0; }
+    .footer-bottom p { color: #333333; font-size: .85rem; }
+    
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .mobile-menu-toggle { display: flex; }
+      .nav-links {
+        position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10,10,10,.98);
+        flex-direction: column; padding: 2rem; transform: translateY(-100%); opacity: 0; visibility: hidden; transition: all .3s ease;
+      }
+      .nav-links.active { transform: translateY(0); opacity: 1; visibility: visible; }
+      .navbar { padding: 1rem; }
+      .hero { height: 30vh; margin-top: 70px; }
+      .hero-content { padding: 0 1rem; }
+      .rules-section { padding: 3rem 0; }
+      .section-title { font-size: 2rem; }
+      .category-header { padding: 1rem 1.5rem; }
+      .category-header h3 { font-size: 1.2rem; }
+      .category-content { padding: 1.5rem; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .mobile-menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+      .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
+      .mobile-menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+    }
+    
+    @media (max-width: 480px) {
+      .container { padding: 0 1rem; }
+      .hero-title { letter-spacing: 1px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="index.html">
+          <img src="https://i.imgur.com/aOZb91M.png" alt="Street Life Logo">
+        </a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#community">Community</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+<!-- Add Server Rules Button -->
+<a href="rules.html" class="rules-btn">
+  <span class="btn-icon"></span>
+  Server Rules
+</a>
+      </ul>
+      <div class="mobile-menu-toggle">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">SERVER RULES</h1>
+      <p class="hero-subtitle">Follow these guidelines for the best roleplay experience</p>
+    </div>
+  </section>
+
+  <!-- Rules Section -->
+  <section class="rules-section">
+    <div class="container rules-container">
+      <div class="section-header">
+        <p class="section-label">Street Life Roleplay</p>
+        <h2 class="section-title">Official Server <span class="accent">Rules</span></h2>
+      </div>
+
+      <div class="rules-important">
+        <h4>Important Notice</h4>
+        <p>All players are expected to read and understand these rules. Ignorance of the rules is not an excuse for violation. Failure to comply may result in warnings, temporary bans, or permanent removal from the server.</p>
+      </div>
+
+      <div class="rules-categories">
+        <!-- General Rules -->
+        <div class="rules-category">
+          <div class="category-header" onclick="toggleCategory('general')">
+            <h3>General Rules</h3>
+            <span class="category-toggle">+</span>
+          </div>
+          <div class="category-content" id="general">
+            <ul class="rules-list">
+              <li>Respect all players and staff members at all times <span class="rule-penalty">WARNING/BAN</span></li>
+              <li>No racism, sexism, homophobia, or hate speech of any kind <span class="rule-penalty">PERMANENT BAN</span></li>
+              <li>English must be used in all public chats for communication purposes</li>
+              <li>No advertising other servers or communities <span class="rule-penalty">PERMANENT BAN</span></li>
+              <li>Do not exploit game bugs or glitches - report them to staff instead <span class="rule-penalty">BAN</span></li>
+              <li>No cheating, hacking, or use of third-party mods that provide unfair advantage <span class="rule-penalty">PERMANENT BAN</span></li>
+              <li>Keep out-of-character (OOC) discussions to appropriate channels</li>
+              <li>Follow all instructions from server staff and administrators</li>
+            </ul>
+          </div>
+        </div>
+<!-- Roleplay Rules Section -->
+<div class="rules-category">
+  <div class="category-header" onclick="toggleCategory('roleplay')">
+    <h3>Roleplay Rules</h3>
+    <span class="category-toggle">+</span>
+  </div>
+  <div class="category-content" id="roleplay">
+    <ul class="rules-list">
+      <li><strong>In Character (IC):</strong> You must always stay in character while roleplaying. Never use real-life information (OOC) in the game.</li>
+      
+      <li><strong>OOC Chat (Out of Character):</strong> This is communication outside of roleplay - server discussions, bugs, IRL topics. Must be clearly marked as OOC and not used in RP.</li>
+      
+      <li><strong>Powergaming:</strong> Don't perform actions that would be impossible in real life. <span class="rule-penalty">BAN</span></li>
+      
+      <li><strong>Metagaming:</strong> Don't use information from outside the game (Discord, streams, etc.) in your roleplay. <span class="rule-penalty">BAN</span></li>
+      
+      <li><strong>Fear RP:</strong> When threatened with a weapon, you must react realistically and value your character's life.</li>
+      
+      <li><strong>RDM (Random Deathmatch):</strong> No killing players without clear RP justification. <span class="rule-penalty">BAN</span></li>
+      
+      <li><strong>VDM (Vehicle Deathmatch):</strong> Don't use vehicles as weapons to kill players. <span class="rule-penalty">BAN</span></li>
+      
+      <li><strong>New Life Rule (NLR):</strong> After death and respawn, forget everything that happened. Don't return to the death location immediately. 30-minute cooldown required.</li>
+      
+      <li><strong>Combat Logging:</strong> No leaving the server to avoid police or when about to die/be arrested. <span class="rule-penalty">BAN</span></li>
+      
+      <li><strong>Cop Baiting:</strong> Don't troll police without valid RP reasons. Respect officers appropriately.</li>
+      
+      <li><strong>Mass RP:</strong> Large-scale events (riots, heists, police raids) must be realistic - imagine the city is full of people.</li>
+      
+      <li><strong>Toxic Player:</strong> No excessive trolling, insulting players without reason, or OOC insults. <span class="rule-penalty">BAN</span></li>
+      
+      <li><strong>No Hacking/Exploits:</strong> No using bugs, cheats, or scripts. <span class="rule-penalty">PERMANENT BAN</span></li>
+      
+      <li><strong>Excessive Complaining:</strong> Don't constantly complain about actions - no crying to police or staff about normal game events.</li>
+      
+      <li><strong>Poor Reason to Kill:</strong> No killing players with weak/unrealistic justifications.</li>
+      
+      <li><strong>Lies to Staff:</strong> Never lie to administrators. <span class="rule-penalty">PERMANENT BAN</span></li>
+      
+      <li><strong>IC to OOC Problems:</strong> Don't bring in-game conflicts into out-of-game disputes.</li>
+      
+      <li><strong>Weapon Usage:</strong> Know how to properly use your weapons. If inexperienced, don't carry high-level weaponry.</li>
+      
+      <li><strong>CCTV Responsibility:</strong> If you commit crimes in monitored areas with cameras, you accept the consequences when police review footage.</li>
+      
+      <li><strong>Speed Running:</strong> No rushing character objectives or farming activities to complete them unrealistically fast. RP takes time.</li>
+      
+      <li><strong>Faction Logs & Cooldown:</strong> All illegal organizations must maintain Discord servers with announcement and attack logs. Defense logs must be recorded. Minimum 1-hour cooldown between major actions.</li>
+      
+      <li><strong>Robbery Situations:</strong> If outnumbered 2v1 or 3v1 with weapons, you cannot shoot them all or escape. You must comply and RP the situation.</li>
+      
+      <li><strong>Police Chase:</strong> When pursued by PD and caught, you must comply. Illegal teams can choose to engage, but no admin spamming.</li>
+      
+      <li><strong>PK (Player Kill):</strong> If killed by someone, don't return to RP with them unless they initiate.</li>
+      
+      <li><strong>FK (Faction Kill):</strong> If killed by a faction/organization, don't return to RP with them.</li>
+      
+      <li><strong>CK (Character Kill):</strong> Permanent character death - serious RP consequence.</li>
+    </ul>
+  </div>
+</div>
+        <!-- Faction Rules -->
+        <div class="rules-category">
+          <div class="category-header" onclick="toggleCategory('factions')">
+            <h3>Faction Rules</h3>
+            <span class="category-toggle">+</span>
+          </div>
+          <div class="category-content" id="factions">
+            <ul class="rules-list">
+              <li>Faction leaders must maintain active rosters and report changes to staff</li>
+              <li>No cross-faction communication without proper in-character reason</li>
+              <li>Follow faction hierarchy and chain of command</li>
+              <li>Faction activities must remain realistic and immersive</li>
+              <li>No faction hopping without proper RP justification and staff approval</li>
+              <li>Official factions must follow their designated roleplay guidelines</li>
+              <li>Criminal factions may not exceed realistic member limits</li>
+              <li>Law enforcement factions must follow proper procedure and escalation</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Business Rules -->
+        <div class="rules-category">
+          <div class="category-header" onclick="toggleCategory('business')">
+            <h3>Business & Economy Rules</h3>
+            <span class="rule-penalty">+</span>
+          </div>
+          <div class="category-content" id="business">
+            <ul class="rules-list">
+              <li>Business owners must maintain realistic operations and hours</li>
+              <li>No exploiting business systems for unfair economic advantage <span class="rule-penalty">BAN</span></li>
+              <li>Business conflicts must be resolved through roleplay, not OOC disputes</li>
+              <li>Follow all server economy guidelines and pricing standards</li>
+              <li>No money laundering or unrealistic financial practices <span class="rule-penalty">BAN</span></li>
+              <li>Business transactions must be properly roleplayed</li>
+              <li>Illegal businesses must operate with realistic risk and consequences</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Communication Rules -->
+        <div class="rules-category">
+          <div class="category-header" onclick="toggleCategory('communication')">
+            <h3>Communication Rules</h3>
+            <span class="category-toggle">+</span>
+          </div>
+          <div class="category-content" id="communication">
+            <ul class="rules-list">
+              <li>Use appropriate voice chat ranges for realistic communication</li>
+              <li>No excessive screaming, mic spam, or disruptive audio <span class="rule-penalty">MUTE</span></li>
+              <li>Radio communications should be used realistically by appropriate factions</li>
+              <li>Keep out-of-character (OOC) chat in designated channels only</li>
+              <li>No trolling, harassment, or disruptive behavior in voice or text chat <span class="rule-penalty">MUTE/BAN</span></li>
+              <li>Use proper roleplay language - avoid modern slang or memes in character</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Vehicle Rules -->
+        <div class="rules-category">
+          <div class="category-header" onclick="toggleCategory('vehicles')">
+            <h3>Vehicle Rules</h3>
+            <span class="category-toggle">+</span>
+          </div>
+          <div class="category-content" id="vehicles">
+            <ul class="rules-list">
+              <li>Drive realistically - no excessive speeding in populated areas</li>
+              <li>No vehicle exploiting or duplication <span class="rule-penalty">BAN</span></li>
+              <li>Park vehicles in appropriate locations, not blocking roads or entrances</li>
+              <li>Use turn signals and follow basic traffic laws in roleplay</li>
+              <li>Vehicle modifications should remain within realistic limits</li>
+              <li>No intentionally destroying vehicles without proper RP reason</li>
+              <li>Stolen vehicles must be used with realistic caution</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 class="footer-title">SL:RP</h4>
+          <p class="footer-text">
+            SL:RP is not affiliated with or endorsed by Rockstar North, Take-Two Interactive or other rightsholders.
+          </p>
+          <p class="footer-contact">Email: lsworldrp@gmail.com</p>
+        </div>
+
+        <div class="footer-col">
+          <h5 class="footer-heading">Links & Resources</h5>
+          <ul class="footer-links">   
+            <li><a href="https://discord.gg/kREf2ueuKN" target="_blank" rel="noopener noreferrer">Discord</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5 class="footer-heading">Need Help?</h5>
+          <ul class="footer-links">
+<li><a href="https://discord.gg/cCz8PJ42Uw" target="_blank" rel="noopener noreferrer">Terms & Conditions</a></li>
+<li><a href="https://discord.gg/cCz8PJ42Uw" target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
+<li><a href="https://discord.gg/cCz8PJ42Uw" target="_blank" rel="noopener noreferrer">Appeal Ban</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5 class="footer-heading">Follow us</h5>
+          <div class="social-links">
+            <!-- TikTok -->
+            <a href="https://www.tiktok.com/@street_life_1" class="social-link" target="_blank" rel="noopener noreferrer">
+              <img src="https://ext.same-assets.com/1146120813/1242780993.svg" alt="TikTok">
+            </a>
+            <!-- Discord -->
+            <a href="https://discord.gg/kREf2ueuKN" class="social-link" target="_blank" rel="noopener noreferrer">
+              <svg width="20" height="20" viewBox="0 0 71 55" fill="none">
+                <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z" fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Copyright © 2025 Street Life All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuToggle && navLinks) {
+      mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileMenuToggle.classList.toggle('active');
+      });
+
+      // Close mobile menu when clicking on links
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          mobileMenuToggle.classList.remove('active');
+        });
+      });
+    }
+
+    // Rules category toggle functionality
+    function toggleCategory(categoryId) {
+      const content = document.getElementById(categoryId);
+      const toggle = content.previousElementSibling.querySelector('.category-toggle');
+      
+      if (content.classList.contains('active')) {
+        content.classList.remove('active');
+        toggle.textContent = '+';
+      } else {
+        // Close any other open categories
+        document.querySelectorAll('.category-content.active').forEach(openContent => {
+          if (openContent.id !== categoryId) {
+            openContent.classList.remove('active');
+            openContent.previousElementSibling.querySelector('.category-toggle').textContent = '+';
+          }
+        });
+        
+        content.classList.add('active');
+        toggle.textContent = '-';
+      }
+    }
+
+    // Open first category by default
+    document.addEventListener('DOMContentLoaded', () => {
+      toggleCategory('general');
+    });
+  </script>
+</body>
+</html>
