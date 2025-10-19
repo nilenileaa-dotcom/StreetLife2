@@ -25,7 +25,6 @@
       --text-white: #ffffff;
       --text-light: #e0e0e0;
       --accent-color: #8b959b;
-      --warning-color: #ffc107;
     }
 
     html { scroll-behavior: smooth; }
@@ -66,9 +65,9 @@
     }
     .nav-links a:hover::after { width: 100%; }
     
-    /* Forums Button */
-    .forums-btn {
-      background: linear-gradient(135deg, #8b959b 0%, #6f6f6f 100%);
+    /* Action Buttons */
+    .action-btn {
+      background: linear-gradient(135deg, var(--accent-color) 0%, #6f6f6f 100%);
       color: var(--text-white);
       border: none;
       padding: 0.7rem 1.8rem;
@@ -87,34 +86,6 @@
       font-size: 0.9rem;
       box-shadow: 0 4px 15px rgba(139, 149, 155, 0.3);
     }
-    
-    /* Admin Access Button */
-    .admin-access-btn {
-      background: linear-gradient(135deg, var(--warning-color) 0%, #e0a800 100%);
-      color: var(--primary-black);
-      border: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 8px;
-      font-family: 'Jost', sans-serif;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-left: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-size: 0.8rem;
-      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
-    }
-
-   /* .admin-access-btn:hover {
-      background: linear-gradient(135deg, #ffd351 0%, #f0b400 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
-    }*/
     
     .mobile-menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
     .mobile-menu-toggle span { width: 25px; height: 3px; background: var(--text-white); transition: all .3s ease; }
@@ -262,6 +233,19 @@
       margin-bottom: 1rem;
     }
     
+    .announcement-content strong {
+      color: var(--text-white);
+    }
+    
+    .announcement-content ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+    }
+    
+    .announcement-content li {
+      margin-bottom: 0.5rem;
+    }
+    
     .announcement-footer {
       display: flex;
       justify-content: space-between;
@@ -338,6 +322,10 @@
       line-height: 1.6;
     }
     
+    .update-content strong {
+      color: var(--text-white);
+    }
+    
     .update-features {
       margin: 1rem 0;
     }
@@ -393,7 +381,6 @@
     
     /* Animations */
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
 
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
@@ -404,7 +391,7 @@
       }
       .nav-links.active { transform: translateY(0); opacity: 1; visibility: visible; }
       .navbar { padding: 1rem; }
-      .forums-btn, .admin-access-btn {
+      .action-btn {
         padding: 0.6rem 1.2rem;
         font-size: 0.8rem;
         margin-left: 0.5rem;
@@ -440,17 +427,10 @@
         </a>
       </div>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#features">Features</a></li>
-        <li><a href="index.html#community">Community</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
-        <li><a href="rules.html">Server Rules</a></li>
-        <li><a href="forums.html" style="color: var(--accent-color);">Forums</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="forums.html">Forums</a></li>   
+      <li><a href="rules.html">Server Rules</a></li>  
       </ul>
-      <a href="https://discord.gg/kREf2ueuKN" class="forums-btn" target="_blank">
-        <span class="btn-icon"></span>
-        Join Us
-      </a>
       <div class="mobile-menu-toggle">
         <span></span><span></span><span></span>
       </div>
@@ -481,12 +461,101 @@
 
       <!-- Announcements Content -->
       <div id="announcements" class="forum-content active">
-        <!-- Topics will be loaded here by JavaScript -->
+        <!-- Announcement 1 -->
+        <div class="announcement-card">
+          <div class="announcement-header">
+            <div>
+              <h3 class="announcement-title">Street Life Roleplay | Opening Community Meeting Announcement</h3>
+              <p class="announcement-meta">Posted October 15, 2024 • 245 views • 32 comments</p>
+            </div>
+            <span class="announcement-badge">Important</span>
+          </div>
+          <div class="announcement-content">
+            <p><strong>Dear Players,</strong></p>
+            <p>We are excited to announce the official opening community meeting for Street Life Roleplay. This meeting will mark the start of our next phase of development and provide everyone with insight into upcoming features and plans for the city.</p>
+            
+            <p><strong>Date & Time:</strong> October 21, 2025 — 10:00 AM (Local Time)</p>
+            
+            <p><strong>Agenda:</strong></p>
+            <ul>
+              <li>Development progress and future updates</li>
+              <li>Illegal systems: drugs, robberies, and underground economy</li>
+              <li>Business opportunities and ownership system</li>
+              <li>Government and faction structures</li>
+              <li>Community feedback and player suggestions</li>
+            </ul>
+            
+            <p>All members are invited to attend and contribute. This is your opportunity to understand the direction of the server and share ideas on how to make <strong>Street Life RP</strong> a stronger and more immersive community.</p>
+            
+            <p>Please arrive on time and keep discussions professional and constructive.</p>
+
+            <p>To knows more, join us on the Discord server. ( https://discord.gg/cCz8PJ42Uw )</p>
+          </div>
+          <div class="announcement-footer">
+            <div class="announcement-author">
+              <div class="author-avatar"></div>
+              <span class="author-name">Street Life Management Team</span>
+            </div>
+            <div class="announcement-stats">
+            </div>
+          </div>
+        </div>
+
+        <!-- Announcement 2 -->
+        <div class="announcement-card">
+          <div class="announcement-header">
+            <div>
+              <h3 class="announcement-title">Street Life Roleplay | New Roleplay Location</h3>
+              <p class="announcement-meta">Posted October 10, 2024 • 189 views • 21 comments</p>
+            </div>
+            <span class="announcement-badge">Event</span>
+          </div>
+          <div class="announcement-content">
+            <p>Get ready! Our next Street Life Roleplay session will take place in Las Venturas.</p>
+            <p>Prepare your characters and gear up for new stories, businesses, and street life opportunities in the city of luck.</p>
+            <p><strong>Stay tuned for event details and server updates.</strong></p>
+          </div>
+          <div class="announcement-footer">
+            <div class="announcement-author">
+              <div class="author-avatar"></div>
+              <span class="author-name">Event Coordinator</span>
+            </div>
+            <div class="announcement-stats">
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Updates Content -->
       <div id="updates" class="forum-content">
-        <!-- Topics will be loaded here by JavaScript -->
+        <!-- Update 1 -->
+        <div class="update-card">
+          <div class="update-header">
+            <h3 class="update-title">SLRP Sneak Peek – New Drug Selling System</h3>
+            <span class="update-version">Sneak - Peek</span>
+          </div>
+          <div class="update-content">
+            <p>Street Life Roleplay is introducing a new NPC drug selling system.</p>
+            <p>Use the <strong>/toggleoffers</strong> command on your phone to receive calls from random NPCs interested in buying.</p>
+            <p>When you visit, you can sell or deny. Each NPC offers random prices, adding variety and risk to your transactions.</p>
+            <p><strong>Get ready to test it and expand your street business gameplay.</strong></p>
+          </div>
+          <p class="update-date">Released: October 18, 2025</p>
+        </div>
+
+        <!-- Update 2 -->
+        <div class="update-card">
+          <div class="update-header">
+            <h3 class="update-title">SLRP Sneak Peek - Store Robbery</h3>
+            <span class="update-version">Sneak - Peek</span>
+          </div>
+          <div class="update-content">
+            <p>To rob a store, point a weapon at the cashier.</p>
+            <p>When the cashier raises their hands, go to the register and use <strong>/robstore</strong>.</p>
+            <p><strong>Expect police response and roleplay consequences.</strong></p>
+          </div>
+          <p class="update-date">Released: October 17, 2025</p>
+        </div>
       </div>
     </div>
   </section>
@@ -500,7 +569,7 @@
           <p class="footer-text">
             SL:RP is not affiliated with or endorsed by Rockstar North, Take-Two Interactive or other rightsholders.
           </p>
-          <p class="footer-contact">Email: streetliferp@gmail.com</p>
+          <p class="footer-contact">Email: lsworldrp@gmail.com</p>
         </div>
 
         <div class="footer-col">
@@ -509,7 +578,7 @@
             <li><a href="https://discord.gg/kREf2ueuKN" target="_blank" rel="noopener noreferrer">Discord</a></li>
             <li><a href="forums.html">Forums</a></li>
             <li><a href="rules.html">Server Rules</a></li>
-            <li><a href="admin-login.html">Admin-Login</a></li>
+
           </ul>
         </div>
 
@@ -544,180 +613,44 @@
     </div>
   </footer>
 
-<script>
-  // Mobile menu toggle
-  const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-  const navLinks = document.querySelector('.nav-links');
-
-  if (mobileMenuToggle && navLinks) {
-    mobileMenuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      mobileMenuToggle.classList.toggle('active');
-    });
-
-    // Close mobile menu when clicking on links
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        mobileMenuToggle.classList.remove('active');
+  <script>
+    // Simple forum tab functionality
+    function showForum(forumId) {
+      // Hide all forum content
+      document.querySelectorAll('.forum-content').forEach(content => {
+        content.classList.remove('active');
       });
-    });
-  }
-
-  // Forum tab functionality
-  function showForum(forumId) {
-    // Hide all forum content
-    document.querySelectorAll('.forum-content').forEach(content => {
-      content.classList.remove('active');
-    });
-    
-    // Remove active class from all tabs
-    document.querySelectorAll('.forum-tab').forEach(tab => {
-      tab.classList.remove('active');
-    });
-    
-    // Show selected forum content
-    document.getElementById(forumId).classList.add('active');
-    
-    // Add active class to clicked tab
-    event.target.classList.add('active');
-  }
-
-  // Load topics from PUBLIC storage (same key as admin)
-  function loadForumTopics() {
-    const PUBLIC_TOPICS_KEY = 'streetlife_public_topics';
-    
-    let topics = [];
-    
-    try {
-      const publicTopics = localStorage.getItem(PUBLIC_TOPICS_KEY);
-      if (publicTopics) {
-        topics = JSON.parse(publicTopics);
-      } else {
-        // Show default message if no topics exist
-        topics = [
-          {
-            id: 1,
-            title: "📢 Welcome to Our Community!",
-            category: "announcement",
-            content: "Welcome to Street Life Roleplay forums! This is where you'll find all the latest server announcements, updates, and events.\n\nCheck back regularly for new content from our admin team!",
-            tags: "welcome, community",
-            date: "Just now",
-            views: 0,
-            comments: 0,
-            author: "Admin Team",
-            badge: "Welcome"
-          }
-        ];
-      }
-    } catch (error) {
-      console.error('Error loading topics:', error);
-      topics = [];
-    }
-
-    displayTopics(topics);
-  }
-
-  function displayTopics(topics) {
-    const announcementsContainer = document.getElementById('announcements');
-    const updatesContainer = document.getElementById('updates');
-    
-    // Clear existing content
-    announcementsContainer.innerHTML = '';
-    updatesContainer.innerHTML = '';
-    
-    if (topics.length === 0) {
-      announcementsContainer.innerHTML = `
-        <div class="announcement-card">
-          <div class="announcement-header">
-            <h3 class="announcement-title">No Announcements Yet</h3>
-            <span class="announcement-badge">Info</span>
-          </div>
-          <div class="announcement-content">
-            <p>There are no announcements at the moment. Check back later for updates from the admin team!</p>
-          </div>
-        </div>
-      `;
       
-      updatesContainer.innerHTML = `
-        <div class="update-card">
-          <div class="update-header">
-            <h3 class="update-title">No Updates Yet</h3>
-            <span class="update-version">v1.0.0</span>
-          </div>
-          <div class="update-content">
-            <p>There are no server updates to display at this time. The admin team will post updates here when available.</p>
-          </div>
-        </div>
-      `;
-      return;
-    }
-    
-    // Sort by ID (newest first)
-    const sortedTopics = topics.sort((a, b) => b.id - a.id);
-    
-    sortedTopics.forEach(topic => {
-      const topicCard = createTopicCard(topic);
+      // Remove active class from all tabs
+      document.querySelectorAll('.forum-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
       
-      if (topic.category === 'update') {
-        updatesContainer.appendChild(topicCard);
-      } else {
-        announcementsContainer.appendChild(topicCard);
-      }
-    });
-  }
-
-  function createTopicCard(topic) {
-    const card = document.createElement('div');
-    card.className = topic.category === 'update' ? 'update-card' : 'announcement-card';
-    
-    if (topic.category === 'update') {
-      card.innerHTML = `
-        <div class="update-header">
-          <h3 class="update-title">${topic.title}</h3>
-          <span class="update-version">${topic.badge}</span>
-        </div>
-        <div class="update-content">
-          <p>${topic.content.replace(/\n/g, '<br>')}</p>
-          ${topic.tags ? `<div class="update-features"><h4>Tags:</h4><p>${topic.tags}</p></div>` : ''}
-        </div>
-        <p class="update-date">Posted: ${topic.date} • 👁️ ${topic.views} • 💬 ${topic.comments}</p>
-      `;
-    } else {
-      card.innerHTML = `
-        <div class="announcement-header">
-          <div>
-            <h3 class="announcement-title">${topic.title}</h3>
-            <p class="announcement-meta">Posted ${topic.date} • ${topic.views} views • ${topic.comments} comments</p>
-          </div>
-          <span class="announcement-badge">${topic.badge}</span>
-        </div>
-        <div class="announcement-content">
-          <p>${topic.content.replace(/\n/g, '<br>')}</p>
-        </div>
-        <div class="announcement-footer">
-          <div class="announcement-author">
-            <div class="author-avatar"></div>
-            <span class="author-name">${topic.author}</span>
-          </div>
-          <div class="announcement-stats">
-            <span>👁️ ${topic.views}</span>
-            <span>💬 ${topic.comments}</span>
-          </div>
-        </div>
-      `;
+      // Show selected forum content
+      document.getElementById(forumId).classList.add('active');
+      
+      // Add active class to clicked tab
+      event.target.classList.add('active');
     }
-    
-    return card;
-  }
 
-  // Load topics when page loads
-  document.addEventListener('DOMContentLoaded', function() {
-    loadForumTopics();
-    
-    // Refresh topics every 30 seconds to catch new posts
-    setInterval(loadForumTopics, 30000);
-  });
-</script>
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuToggle && navLinks) {
+      mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileMenuToggle.classList.toggle('active');
+      });
+
+      // Close mobile menu when clicking on links
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          mobileMenuToggle.classList.remove('active');
+        });
+      });
+    }
+  </script>
 </body>
 </html>
