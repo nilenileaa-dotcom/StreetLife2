@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Access - Street Life: Roleplay</title>
+  <link rel="icon" href="https://i.imgur.com/aOZb91M.png"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* Reset and Base Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary-black: #0a0a0a;
+      --secondary-black: #1a1a1a;
+      --dark-gray: #2a2a2a;
+      --medium-gray: #404040;
+      --light-gray: #808080;
+      --text-white: #ffffff;
+      --text-light: #e0e0e0;
+      --accent-color: #8b959b;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--primary-black);
+      color: var(--text-white);
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(rgba(0,0,0,.8), rgba(0,0,0,.9)), url('https://ext.same-assets.com/1146120813/679993928.gif');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .login-container {
+      max-width: 400px;
+      width: 90%;
+      background: var(--secondary-black);
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--medium-gray);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      background: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .login-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-white);
+    }
+
+    .login-subtitle {
+      color: var(--light-gray);
+      font-size: 0.9rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--dark-gray);
+      border: 1px solid var(--medium-gray);
+      border-radius: 6px;
+      color: var(--text-white);
+      font-family: 'Jost', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(139, 149, 155, 0.2);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--medium-gray);
+      color: var(--text-white);
+      margin-top: 1rem;
+    }
+
+    .btn-secondary:hover {
+      background: var(--light-gray);
+    }
+
+    .hidden-access {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--medium-gray);
+      text-align: center;
+    }
+
+    .hidden-access h4 {
+      color: var(--text-white);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .access-codes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .access-code {
+      background: var(--dark-gray);
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      border: 1px solid var(--medium-gray);
+    }
+
+    .admin-info {
+      background: rgba(255, 193, 7, 0.1);
+      border: 1px solid var(--warning-color);
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-info h4 {
+      color: var(--warning-color);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .admin-info p {
+      color: var(--text-light);
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .error-message {
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid var(--danger-color);
+      color: var(--danger-color);
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* Animations */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 2rem 1.5rem;
+      }
+      
+      .access-codes {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">🔐</div>
+      <h1 class="login-title">Admin Access</h1>
+      <p class="login-subtitle">Street Life Roleplay - Secure Admin Portal</p>
+    </div>
+
+    <div class="admin-info">
+      <h4>Restricted Access</h4>
+      <p>This portal is for authorized administrators only. Unauthorized access attempts will be logged.</p>
+    </div>
+
+    <div class="error-message" id="errorMessage">
+      Invalid access code. Please try again.
+    </div>
+
+    <form id="adminLoginForm">
+      <div class="form-group">
+        <label class="form-label" for="accessCode">Access Code</label>
+        <input type="password" id="accessCode" class="form-input" placeholder="Enter admin access code" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary">
+        <span></span>
+        Access Admin Panel
+      </button>
+    </form>
+    <a href="forums.html" class="btn btn-secondary">
+      <span>←</span>
+      Back to Forums
+    </a>
+  </div>
+
+  <script>
+    // Admin Access Codes (In production, this should be server-side)
+    const validAccessCodes = [
+      'SL2024ADMIN',
+      'STREETLIFE123', 
+      'ADMINMASTER',
+      'ROLEPLAY2024',
+      'SLRPADMIN2024'
+    ];
+
+    // Login form handler
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const accessCode = document.getElementById('accessCode').value.trim();
+      const errorMessage = document.getElementById('errorMessage');
+      
+      // Validate access code
+      if (validAccessCodes.includes(accessCode.toUpperCase())) {
+        // Successful login
+        localStorage.setItem('adminAuthenticated', 'true');
+        localStorage.setItem('adminLoginTime', new Date().toISOString());
+        
+        // Redirect to admin panel
+        window.location.href = 'admin-forums.html';
+      } else {
+        // Failed login
+        errorMessage.style.display = 'block';
+        document.getElementById('accessCode').classList.add('shake');
+        
+        // Remove shake animation after it completes
+        setTimeout(() => {
+          document.getElementById('accessCode').classList.remove('shake');
+        }, 500);
+        
+        // Clear input
+        document.getElementById('accessCode').value = '';
+      }
+    });
+
+    // Auto-focus on input
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('accessCode').focus();
+    });
+
+    // Clear any existing admin session when visiting login page
+    localStorage.removeItem('adminAuthenticated');
+  </script>
+</body>
+</html>

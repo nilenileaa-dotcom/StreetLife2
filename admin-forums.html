@@ -444,7 +444,6 @@
         <li><a href="index.html#contact">Contact</a></li>
         <li><a href="rules.html">Server Rules</a></li>
         <li><a href="forums.html">Forums</a></li>
-        <li><a href="admin-forums.html" style="color: var(--warning-color);">Admin Panel</a></li>
       </ul>
       <a href="forums.html" class="admin-btn">
         <span class="btn-icon"></span>
@@ -566,7 +565,7 @@
           <p class="footer-text">
             SL:RP is not affiliated with or endorsed by Rockstar North, Take-Two Interactive or other rightsholders.
           </p>
-          <p class="footer-contact">Email: lsworldrp@gmail.com</p>
+          <p class="footer-contact">Email: streetliferp@gmail.com</p>
         </div>
 
         <div class="footer-col">
@@ -576,6 +575,7 @@
             <li><a href="forums.html">Forums</a></li>
             <li><a href="admin-forums.html">Admin Panel</a></li>
             <li><a href="rules.html">Server Rules</a></li>
+            <li><a href="admin-forums.html" style="color: var(--warning-color);">Admin Panel</a></li>
           </ul>
         </div>
 
@@ -610,348 +610,329 @@
     </div>
   </footer>
 
-  <script>
-    // Mobile menu toggle
-    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-
-    if (mobileMenuToggle && navLinks) {
-      mobileMenuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        mobileMenuToggle.classList.toggle('active');
-      });
-
-      // Close mobile menu when clicking on links
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-          navLinks.classList.remove('active');
-          mobileMenuToggle.classList.remove('active');
-        });
-      });
+ <script>
+  // ==================== ADMIN AUTHENTICATION ====================
+  function checkAdminAuthentication() {
+    const isAuthenticated = localStorage.getItem('adminAuthenticated');
+    const loginTime = localStorage.getItem('adminLoginTime');
+    
+    if (!isAuthenticated || !loginTime) {
+      redirectToLogin();
+      return false;
     }
-
-    // Admin tab functionality
-    function showAdminTab(tabId) {
-      // Hide all admin content
-      document.querySelectorAll('.admin-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      
-      // Remove active class from all tabs
-      document.querySelectorAll('.admin-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // Show selected admin content
-      document.getElementById(tabId).classList.add('active');
-      
-      // Add active class to clicked tab
-      event.target.classList.add('active');
-      
-      // If showing manage topics, refresh the list
-      if (tabId === 'manage-topics') {
-        loadTopics();
-      }
+    
+    // Check if session is expired (24 hours)
+    const loginDate = new Date(loginTime);
+    const currentDate = new Date();
+    const hoursDiff = (currentDate - loginDate) / (1000 * 60 * 60);
+    
+    if (hoursDiff > 24) {
+      localStorage.removeItem('adminAuthenticated');
+      localStorage.removeItem('adminLoginTime');
+      redirectToLogin();
+      return false;
     }
+    
+    return true;
+  }
+  
+  function redirectToLogin() {
+    window.location.href = 'admin-login.html';
+  }
+  
+  function logout() {
+    localStorage.removeItem('adminAuthenticated');
+    localStorage.removeItem('adminLoginTime');
+    redirectToLogin();
+  }
 
-    // Topic Management System
-    let topics = JSON.parse(localStorage.getItem('forumTopics')) || [
-      {
-        id: 1,
-        title: "Server Maintenance - March 15",
-        category: "announcement",
-        content: "We will be performing scheduled server maintenance on March 15th from 2:00 AM to 4:00 AM EST. During this time, the server will be temporarily unavailable. This maintenance includes performance optimizations and security updates.\n\nWe appreciate your patience and understanding as we work to improve your gaming experience.",
-        tags: "maintenance, server, update",
-        date: "2 days ago",
-        views: 128,
-        comments: 24,
-        author: "Admin Team",
-        badge: "Important"
-      },
-      {
-        id: 2,
-        title: "New Faction Applications Open",
-        category: "announcement", 
-        content: "We are now accepting applications for new official factions! If your group is interested in becoming an recognized faction within Street Life RP, now is your chance.\n\nRequirements include:\n- Minimum of 5 active members\n- Clear faction concept and goals\n- Willingness to follow server rules\n- Active participation in server events",
-        tags: "factions, applications, opportunity",
-        date: "1 week ago",
-        views: 342,
-        comments: 56,
-        author: "Faction Management",
-        badge: "Opportunity"
-      },
-      {
-        id: 3,
-        title: "Community Event: Grand Theft Auto Show",
-        category: "event",
-        content: "Get your engines ready! This Saturday we're hosting our monthly Grand Theft Auto Show at the Legion Square. Show off your customized vehicles and compete for prizes in various categories:\n\n- Best Overall Vehicle\n- Most Creative Design\n- Best Performance Mods\n- People's Choice Award\n\nEvent starts at 8:00 PM EST. Don't miss out!",
-        tags: "event, cars, competition",
-        date: "3 days ago",
-        views: 215,
-        comments: 42,
-        author: "Event Coordinator",
-        badge: "Event"
-      },
-      {
-        id: 4,
-        title: "Economic System Overhaul",
-        category: "update",
-        content: "We've completely revamped the server's economic system to provide a more balanced and realistic experience. The changes include adjusted pricing for vehicles, properties, and businesses.",
-        tags: "economy, update, system",
-        date: "March 10, 2025",
-        views: 189,
-        comments: 31,
-        author: "Development Team",
-        badge: "v2.1.3"
-      },
-      {
-        id: 5,
-        title: "New Vehicle Pack Released",
-        category: "update",
-        content: "Introducing 15 new custom vehicles to enhance your roleplay experience! This update brings a variety of cars, motorcycles, and specialty vehicles to the streets of Los Santos.",
-        tags: "vehicles, update, content",
-        date: "March 3, 2025",
-        views: 267,
-        comments: 48,
-        author: "Development Team",
-        badge: "v2.1.2"
-      }
-    ];
+  // ==================== MAIN ADMIN FUNCTIONALITY ====================
+  
+  // Mobile menu toggle
+  const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
 
-    // Save topics to localStorage
-    function saveTopics() {
-      localStorage.setItem('forumTopics', JSON.stringify(topics));
-      // Also update the forums page
-      updateForumsPage();
+  if (mobileMenuToggle && navLinks) {
+    mobileMenuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      mobileMenuToggle.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        mobileMenuToggle.classList.remove('active');
+      });
+    });
+  }
+
+  // Admin tab functionality
+  function showAdminTab(tabId) {
+    if (!checkAdminAuthentication()) return;
+    
+    document.querySelectorAll('.admin-content').forEach(content => {
+      content.classList.remove('active');
+    });
+    
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+    
+    if (tabId === 'manage-topics') {
+      loadTopics();
     }
+  }
 
-    // Topic form submission
-    document.getElementById('topicForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const title = document.getElementById('topicTitle').value;
-      const category = document.getElementById('topicCategory').value;
-      const content = document.getElementById('topicContent').value;
-      const tags = document.getElementById('topicTags').value;
-      
-      // Check if we're editing an existing topic
-      const editingTopicId = this.dataset.editingTopicId;
-      
-      if (editingTopicId) {
-        // Update existing topic
-        const topicIndex = topics.findIndex(t => t.id == editingTopicId);
-        if (topicIndex !== -1) {
-          topics[topicIndex] = {
-            ...topics[topicIndex],
-            title: title,
-            category: category,
-            content: content,
-            tags: tags,
-            badge: getBadgeForCategory(category),
-            date: "Updated just now"
-          };
-          saveTopics();
-          showNotification(`Topic "${title}" updated successfully!`, 'success');
-          
-          // Reset form mode
-          delete this.dataset.editingTopicId;
-          this.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
-        }
-      } else {
-        // Create new topic
-        const newTopic = {
-          id: Date.now(), // Unique ID based on timestamp
+  // Topic Management System
+  let topics = JSON.parse(localStorage.getItem('forumTopics')) || [
+    {
+      id: 1,
+      title: "🚀 Server Maintenance - March 15",
+      category: "announcement",
+      content: "We will be performing scheduled server maintenance on March 15th from 2:00 AM to 4:00 AM EST. During this time, the server will be temporarily unavailable. This maintenance includes performance optimizations and security updates.\n\nWe appreciate your patience and understanding as we work to improve your gaming experience.",
+      tags: "maintenance, server, update",
+      date: "2 days ago",
+      views: 128,
+      comments: 24,
+      author: "Admin Team",
+      badge: "Important"
+    }
+    // ... other default topics
+  ];
+
+  function saveTopics() {
+    localStorage.setItem('forumTopics', JSON.stringify(topics));
+    updateForumsPage();
+  }
+
+  document.getElementById('topicForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!checkAdminAuthentication()) return;
+    
+    const title = document.getElementById('topicTitle').value;
+    const category = document.getElementById('topicCategory').value;
+    const content = document.getElementById('topicContent').value;
+    const tags = document.getElementById('topicTags').value;
+    
+    const editingTopicId = this.dataset.editingTopicId;
+    
+    if (editingTopicId) {
+      const topicIndex = topics.findIndex(t => t.id == editingTopicId);
+      if (topicIndex !== -1) {
+        topics[topicIndex] = {
+          ...topics[topicIndex],
           title: title,
           category: category,
           content: content,
           tags: tags,
-          date: "Just now",
-          views: 0,
-          comments: 0,
-          author: "Admin Team",
-          badge: getBadgeForCategory(category)
+          badge: getBadgeForCategory(category),
+          date: "Updated just now"
         };
+        saveTopics();
+        showNotification(`✅ Topic "${title}" updated successfully!`, 'success');
         
-        topics.unshift(newTopic); // Add to beginning of array
-        saveTopics();
-        showNotification(`Topic "${title}" created successfully!`, 'success');
+        delete this.dataset.editingTopicId;
+        this.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
       }
-      
-      // Reset form
-      this.reset();
-      showAdminTab('manage-topics');
-    });
-
-    function getBadgeForCategory(category) {
-      const badges = {
-        'announcement': 'Announcement',
-        'update': 'Update', 
-        'event': 'Event',
-        'important': 'Important'
+    } else {
+      const newTopic = {
+        id: Date.now(),
+        title: title,
+        category: category,
+        content: content,
+        tags: tags,
+        date: "Just now",
+        views: 0,
+        comments: 0,
+        author: "Admin Team",
+        badge: getBadgeForCategory(category)
       };
-      return badges[category] || ' Info';
+      
+      topics.unshift(newTopic);
+      saveTopics();
+      showNotification(`✅ Topic "${title}" created successfully!`, 'success');
     }
+    
+    this.reset();
+    showAdminTab('manage-topics');
+  });
 
-    // Load topics into management list
-    function loadTopics() {
-      const topicsList = document.getElementById('topicsListContainer');
-      topicsList.innerHTML = '';
-      
-      if (topics.length === 0) {
-        topicsList.innerHTML = '<div class="topic-item"><div class="topic-info"><h4>No topics yet</h4><p>Create your first topic using the "Create Topic" tab!</p></div></div>';
-        return;
-      }
-      
-      // Sort by ID (newest first)
-      const sortedTopics = topics.sort((a, b) => b.id - a.id);
-      
-      sortedTopics.forEach(topic => {
-        const topicItem = document.createElement('div');
-        topicItem.className = 'topic-item';
-        topicItem.innerHTML = `
-          <div class="topic-info">
-            <h4>${topic.title}</h4>
-            <div class="topic-meta">
-              <span> ${topic.date}</span>
-              <span> ${topic.views}</span>
-              <span> ${topic.comments}</span>
-              <span class="topic-badge badge-${topic.category}">${topic.badge}</span>
-            </div>
+  function getBadgeForCategory(category) {
+    const badges = {
+      'announcement': '📢 Announcement',
+      'update': '🔄 Update', 
+      'event': '🎉 Event',
+      'important': '🚨 Important'
+    };
+    return badges[category] || '📋 Info';
+  }
+
+  function loadTopics() {
+    if (!checkAdminAuthentication()) return;
+    
+    const topicsList = document.getElementById('topicsListContainer');
+    topicsList.innerHTML = '';
+    
+    if (topics.length === 0) {
+      topicsList.innerHTML = '<div class="topic-item"><div class="topic-info"><h4>No topics yet</h4><p>Create your first topic using the "Create Topic" tab!</p></div></div>';
+      return;
+    }
+    
+    const sortedTopics = topics.sort((a, b) => b.id - a.id);
+    
+    sortedTopics.forEach(topic => {
+      const topicItem = document.createElement('div');
+      topicItem.className = 'topic-item';
+      topicItem.innerHTML = `
+        <div class="topic-info">
+          <h4>${topic.title}</h4>
+          <div class="topic-meta">
+            <span>📅 ${topic.date}</span>
+            <span>👁️ ${topic.views}</span>
+            <span>💬 ${topic.comments}</span>
+            <span class="topic-badge badge-${topic.category}">${topic.badge}</span>
           </div>
-          <div class="topic-actions">
-            <button class="action-btn" onclick="editTopic(${topic.id})" title="Edit">✏️</button>
-            <button class="action-btn" onclick="deleteTopic(${topic.id})" title="Delete">🗑️</button>
-          </div>
-        `;
-        topicsList.appendChild(topicItem);
-      });
-    }
-
-    // Edit topic function
-    function editTopic(topicId) {
-      const topic = topics.find(t => t.id === topicId);
-      if (!topic) return;
-      
-      // Fill the form with topic data
-      document.getElementById('topicTitle').value = topic.title;
-      document.getElementById('topicCategory').value = topic.category;
-      document.getElementById('topicContent').value = topic.content;
-      document.getElementById('topicTags').value = topic.tags;
-      
-      // Switch to create topic tab
-      showAdminTab('create-topic');
-      
-      // Change form to update mode
-      const form = document.getElementById('topicForm');
-      const submitBtn = form.querySelector('button[type="submit"]');
-      
-      // Store the topic ID we're editing
-      form.dataset.editingTopicId = topicId;
-      submitBtn.textContent = '💾 Update Topic';
-      
-      // Scroll to form
-      document.getElementById('create-topic').scrollIntoView({ behavior: 'smooth' });
-      
-      showNotification(`✏️ Editing: "${topic.title}"`, 'info');
-    }
-
-    // Delete topic function
-    function deleteTopic(topicId) {
-      const topic = topics.find(t => t.id === topicId);
-      if (!topic) return;
-      
-      if (confirm(`🗑️ Are you sure you want to delete "${topic.title}"? This action cannot be undone.`)) {
-        topics = topics.filter(t => t.id !== topicId);
-        saveTopics();
-        loadTopics();
-        showNotification(`✅ Topic deleted successfully!`, 'success');
-      }
-    }
-
-    // Update forums page with new topics
-    function updateForumsPage() {
-      console.log('📊 Forums data updated - topics count:', topics.length);
-    }
-
-    // Notification system
-    function showNotification(message, type = 'info') {
-      // Create notification element
-      const notification = document.createElement('div');
-      notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--danger-color)' : 'var(--accent-color)'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        z-index: 10000;
-        animation: slideInRight 0.3s ease;
+        </div>
+        <div class="topic-actions">
+          <button class="action-btn" onclick="editTopic(${topic.id})" title="Edit">✏️</button>
+          <button class="action-btn" onclick="deleteTopic(${topic.id})" title="Delete">🗑️</button>
+        </div>
       `;
-      notification.textContent = message;
-      
-      document.body.appendChild(notification);
-      
-      // Remove after 3 seconds
-      setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-          document.body.removeChild(notification);
-        }, 300);
-      }, 3000);
-    }
+      topicsList.appendChild(topicItem);
+    });
+  }
 
-    // Add CSS for notifications
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-      }
-      @keyframes slideOutRight {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-      }
+  function editTopic(topicId) {
+    if (!checkAdminAuthentication()) return;
+    
+    const topic = topics.find(t => t.id === topicId);
+    if (!topic) return;
+    
+    document.getElementById('topicTitle').value = topic.title;
+    document.getElementById('topicCategory').value = topic.category;
+    document.getElementById('topicContent').value = topic.content;
+    document.getElementById('topicTags').value = topic.tags;
+    
+    showAdminTab('create-topic');
+    
+    const form = document.getElementById('topicForm');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    
+    form.dataset.editingTopicId = topicId;
+    submitBtn.textContent = '💾 Update Topic';
+    
+    document.getElementById('create-topic').scrollIntoView({ behavior: 'smooth' });
+    
+    showNotification(`✏️ Editing: "${topic.title}"`, 'info');
+  }
+
+  function deleteTopic(topicId) {
+    if (!checkAdminAuthentication()) return;
+    
+    const topic = topics.find(t => t.id === topicId);
+    if (!topic) return;
+    
+    if (confirm(`🗑️ Are you sure you want to delete "${topic.title}"? This action cannot be undone.`)) {
+      topics = topics.filter(t => t.id !== topicId);
+      saveTopics();
+      loadTopics();
+      showNotification(`✅ Topic deleted successfully!`, 'success');
+    }
+  }
+
+  function updateForumsPage() {
+    console.log('📊 Forums data updated - topics count:', topics.length);
+  }
+
+  // Notification system
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--danger-color)' : 'var(--accent-color)'};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 10000;
+      animation: slideInRight 0.3s ease;
     `;
-    document.head.appendChild(style);
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease';
+      setTimeout(() => {
+        if (document.body.contains(notification)) {
+          document.body.removeChild(notification);
+        }
+      }, 300);
+    }, 3000);
+  }
 
-    // Check if user is admin (simplified version)
-    function checkAdminAccess() {
-      // For demo purposes, we'll allow access
-      // In real application, check server-side authentication
-      const isAdmin = true; // Always true for demo
-      
-      if (!isAdmin) {
-        showNotification('🔒 Admin access required! Redirecting...', 'error');
-        setTimeout(() => {
-          window.location.href = 'forums.html';
-        }, 2000);
-        return false;
-      }
-      return true;
+  // Add CSS for notifications
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
+    @keyframes slideOutRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+    
+    .logout-btn {
+      background: var(--danger-color) !important;
+      margin-left: 0.5rem;
+    }
+    
+    .logout-btn:hover {
+      background: #c82333 !important;
+    }
+  `;
+  document.head.appendChild(style);
 
-    // Initialize admin panel
-    document.addEventListener('DOMContentLoaded', function() {
-      if (checkAdminAccess()) {
-        loadTopics();
-        showNotification('👋 Welcome to Admin Panel!', 'info');
-      }
-    });
+  // Add logout button to navigation
+  function addLogoutButton() {
+    const navContainer = document.querySelector('.nav-container');
+    const logoutBtn = document.createElement('a');
+    logoutBtn.href = '#';
+    logoutBtn.className = 'admin-btn logout-btn';
+    logoutBtn.innerHTML = '<span class="btn-icon"></span>Logout';
+    logoutBtn.onclick = function(e) {
+      e.preventDefault();
+      logout();
+    };
+    navContainer.appendChild(logoutBtn);
+  }
 
-    // Form reset handler
-    document.querySelector('button[type="reset"]').addEventListener('click', function() {
-      const form = document.getElementById('topicForm');
-      delete form.dataset.editingTopicId;
-      form.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
-      showNotification('🔄 Form cleared!', 'info');
-    });
+  // Initialize admin panel
+  document.addEventListener('DOMContentLoaded', function() {
+    if (checkAdminAuthentication()) {
+      addLogoutButton();
+      loadTopics();
+      showNotification('🔐 Welcome to Admin Panel!', 'info');
+    }
+  });
 
-    // Settings save handler
-    document.querySelector('#admin-settings .btn-primary').addEventListener('click', function() {
-      showNotification('✅ Settings saved successfully!', 'success');
-    });
-  </script>
+  document.querySelector('button[type="reset"]').addEventListener('click', function() {
+    const form = document.getElementById('topicForm');
+    delete form.dataset.editingTopicId;
+    form.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
+    showNotification('🔄 Form cleared!', 'info');
+  });
+
+  document.querySelector('#admin-settings .btn-primary').addEventListener('click', function() {
+    if (!checkAdminAuthentication()) return;
+    showNotification('✅ Settings saved successfully!', 'success');
+  });
+</script>
 </body>
 </html>
