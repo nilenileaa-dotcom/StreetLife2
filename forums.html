@@ -544,189 +544,180 @@
     </div>
   </footer>
 
-  <script>
-    // Mobile menu toggle
-    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
+<script>
+  // Mobile menu toggle
+  const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
 
-    if (mobileMenuToggle && navLinks) {
-      mobileMenuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        mobileMenuToggle.classList.toggle('active');
+  if (mobileMenuToggle && navLinks) {
+    mobileMenuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      mobileMenuToggle.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        mobileMenuToggle.classList.remove('active');
       });
+    });
+  }
 
-      // Close mobile menu when clicking on links
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-          navLinks.classList.remove('active');
-          mobileMenuToggle.classList.remove('active');
-        });
-      });
-    }
+  // Forum tab functionality
+  function showForum(forumId) {
+    // Hide all forum content
+    document.querySelectorAll('.forum-content').forEach(content => {
+      content.classList.remove('active');
+    });
+    
+    // Remove active class from all tabs
+    document.querySelectorAll('.forum-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    
+    // Show selected forum content
+    document.getElementById(forumId).classList.add('active');
+    
+    // Add active class to clicked tab
+    event.target.classList.add('active');
+  }
 
-    // Forum tab functionality
-    function showForum(forumId) {
-      // Hide all forum content
-      document.querySelectorAll('.forum-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      
-      // Remove active class from all tabs
-      document.querySelectorAll('.forum-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      
-      // Show selected forum content
-      document.getElementById(forumId).classList.add('active');
-      
-      // Add active class to clicked tab
-      event.target.classList.add('active');
-    }
-
-    // Load topics from localStorage
-    function loadForumTopics() {
-      const topics = JSON.parse(localStorage.getItem('forumTopics')) || [
-        {
-          id: 1,
-          title: "🚀 Server Maintenance - March 15",
-          category: "announcement",
-          content: "We will be performing scheduled server maintenance on March 15th from 2:00 AM to 4:00 AM EST. During this time, the server will be temporarily unavailable. This maintenance includes performance optimizations and security updates.\n\nWe appreciate your patience and understanding as we work to improve your gaming experience.",
-          tags: "maintenance, server, update",
-          date: "2 days ago",
-          views: 128,
-          comments: 24,
-          author: "Admin Team",
-          badge: "Important"
-        },
-        {
-          id: 2,
-          title: "📋 New Faction Applications Open",
-          category: "announcement", 
-          content: "We are now accepting applications for new official factions! If your group is interested in becoming an recognized faction within Street Life RP, now is your chance.\n\nRequirements include:\n- Minimum of 5 active members\n- Clear faction concept and goals\n- Willingness to follow server rules\n- Active participation in server events",
-          tags: "factions, applications, opportunity",
-          date: "1 week ago",
-          views: 342,
-          comments: 56,
-          author: "Faction Management",
-          badge: "Opportunity"
-        },
-        {
-          id: 3,
-          title: "🏎️ Community Event: Grand Theft Auto Show",
-          category: "event",
-          content: "Get your engines ready! This Saturday we're hosting our monthly Grand Theft Auto Show at the Legion Square. Show off your customized vehicles and compete for prizes in various categories:\n\n- Best Overall Vehicle\n- Most Creative Design\n- Best Performance Mods\n- People's Choice Award\n\nEvent starts at 8:00 PM EST. Don't miss out!",
-          tags: "event, cars, competition",
-          date: "3 days ago",
-          views: 215,
-          comments: 42,
-          author: "Event Coordinator",
-          badge: "Event"
-        },
-        {
-          id: 4,
-          title: "🔄 Economic System Overhaul",
-          category: "update",
-          content: "We've completely revamped the server's economic system to provide a more balanced and realistic experience. The changes include adjusted pricing for vehicles, properties, and businesses.",
-          tags: "economy, update, system",
-          date: "March 10, 2025",
-          views: 189,
-          comments: 31,
-          author: "Development Team",
-          badge: "v2.1.3"
-        },
-        {
-          id: 5,
-          title: "🚗 New Vehicle Pack Released",
-          category: "update",
-          content: "Introducing 15 new custom vehicles to enhance your roleplay experience! This update brings a variety of cars, motorcycles, and specialty vehicles to the streets of Los Santos.",
-          tags: "vehicles, update, content",
-          date: "March 3, 2025",
-          views: 267,
-          comments: 48,
-          author: "Development Team",
-          badge: "v2.1.2"
-        }
-      ];
-
-      displayTopics(topics);
-    }
-
-    function displayTopics(topics) {
-      const announcementsContainer = document.getElementById('announcements');
-      const updatesContainer = document.getElementById('updates');
-      
-      // Clear existing content
-      announcementsContainer.innerHTML = '';
-      updatesContainer.innerHTML = '';
-      
-      // Sort topics by ID (newest first)
-      const sortedTopics = topics.sort((a, b) => b.id - a.id);
-      
-      sortedTopics.forEach(topic => {
-        const topicCard = createTopicCard(topic);
-        
-        if (topic.category === 'update') {
-          updatesContainer.appendChild(topicCard);
-        } else {
-          announcementsContainer.appendChild(topicCard);
-        }
-      });
-
-      // Show message if no topics
-      if (announcementsContainer.children.length === 0) {
-        announcementsContainer.innerHTML = '<div class="announcement-card"><p>No announcements yet. Check back later!</p></div>';
-      }
-      if (updatesContainer.children.length === 0) {
-        updatesContainer.innerHTML = '<div class="update-card"><p>No updates yet. Check back later!</p></div>';
-      }
-    }
-
-    function createTopicCard(topic) {
-      const card = document.createElement('div');
-      card.className = topic.category === 'update' ? 'update-card' : 'announcement-card';
-      
-      if (topic.category === 'update') {
-        card.innerHTML = `
-          <div class="update-header">
-            <h3 class="update-title">${topic.title}</h3>
-            <span class="update-version">${topic.badge}</span>
-          </div>
-          <div class="update-content">
-            <p>${topic.content.replace(/\n/g, '<br>')}</p>
-            ${topic.tags ? `<div class="update-features"><h4>Tags:</h4><p>${topic.tags}</p></div>` : ''}
-          </div>
-          <p class="update-date">Posted: ${topic.date} • ${topic.views} • ${topic.comments}</p>
-        `;
+  // Load topics from PUBLIC storage (same key as admin)
+  function loadForumTopics() {
+    const PUBLIC_TOPICS_KEY = 'streetlife_public_topics';
+    
+    let topics = [];
+    
+    try {
+      const publicTopics = localStorage.getItem(PUBLIC_TOPICS_KEY);
+      if (publicTopics) {
+        topics = JSON.parse(publicTopics);
       } else {
-        card.innerHTML = `
+        // Show default message if no topics exist
+        topics = [
+          {
+            id: 1,
+            title: "📢 Welcome to Our Community!",
+            category: "announcement",
+            content: "Welcome to Street Life Roleplay forums! This is where you'll find all the latest server announcements, updates, and events.\n\nCheck back regularly for new content from our admin team!",
+            tags: "welcome, community",
+            date: "Just now",
+            views: 0,
+            comments: 0,
+            author: "Admin Team",
+            badge: "Welcome"
+          }
+        ];
+      }
+    } catch (error) {
+      console.error('Error loading topics:', error);
+      topics = [];
+    }
+
+    displayTopics(topics);
+  }
+
+  function displayTopics(topics) {
+    const announcementsContainer = document.getElementById('announcements');
+    const updatesContainer = document.getElementById('updates');
+    
+    // Clear existing content
+    announcementsContainer.innerHTML = '';
+    updatesContainer.innerHTML = '';
+    
+    if (topics.length === 0) {
+      announcementsContainer.innerHTML = `
+        <div class="announcement-card">
           <div class="announcement-header">
-            <div>
-              <h3 class="announcement-title">${topic.title}</h3>
-              <p class="announcement-meta">Posted ${topic.date} • ${topic.views} views • ${topic.comments} comments</p>
-            </div>
-            <span class="announcement-badge">${topic.badge}</span>
+            <h3 class="announcement-title">No Announcements Yet</h3>
+            <span class="announcement-badge">Info</span>
           </div>
           <div class="announcement-content">
-            <p>${topic.content.replace(/\n/g, '<br>')}</p>
+            <p>There are no announcements at the moment. Check back later for updates from the admin team!</p>
           </div>
-          <div class="announcement-footer">
-            <div class="announcement-author">
-              <div class="author-avatar"></div>
-              <span class="author-name">${topic.author}</span>
-            </div>
-            <div class="announcement-stats">
-            </div>
-          </div>
-        `;
-      }
+        </div>
+      `;
       
-      return card;
+      updatesContainer.innerHTML = `
+        <div class="update-card">
+          <div class="update-header">
+            <h3 class="update-title">No Updates Yet</h3>
+            <span class="update-version">v1.0.0</span>
+          </div>
+          <div class="update-content">
+            <p>There are no server updates to display at this time. The admin team will post updates here when available.</p>
+          </div>
+        </div>
+      `;
+      return;
     }
-
-    // Load topics when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-      loadForumTopics();
+    
+    // Sort by ID (newest first)
+    const sortedTopics = topics.sort((a, b) => b.id - a.id);
+    
+    sortedTopics.forEach(topic => {
+      const topicCard = createTopicCard(topic);
+      
+      if (topic.category === 'update') {
+        updatesContainer.appendChild(topicCard);
+      } else {
+        announcementsContainer.appendChild(topicCard);
+      }
     });
-  </script>
+  }
+
+  function createTopicCard(topic) {
+    const card = document.createElement('div');
+    card.className = topic.category === 'update' ? 'update-card' : 'announcement-card';
+    
+    if (topic.category === 'update') {
+      card.innerHTML = `
+        <div class="update-header">
+          <h3 class="update-title">${topic.title}</h3>
+          <span class="update-version">${topic.badge}</span>
+        </div>
+        <div class="update-content">
+          <p>${topic.content.replace(/\n/g, '<br>')}</p>
+          ${topic.tags ? `<div class="update-features"><h4>Tags:</h4><p>${topic.tags}</p></div>` : ''}
+        </div>
+        <p class="update-date">Posted: ${topic.date} • 👁️ ${topic.views} • 💬 ${topic.comments}</p>
+      `;
+    } else {
+      card.innerHTML = `
+        <div class="announcement-header">
+          <div>
+            <h3 class="announcement-title">${topic.title}</h3>
+            <p class="announcement-meta">Posted ${topic.date} • ${topic.views} views • ${topic.comments} comments</p>
+          </div>
+          <span class="announcement-badge">${topic.badge}</span>
+        </div>
+        <div class="announcement-content">
+          <p>${topic.content.replace(/\n/g, '<br>')}</p>
+        </div>
+        <div class="announcement-footer">
+          <div class="announcement-author">
+            <div class="author-avatar"></div>
+            <span class="author-name">${topic.author}</span>
+          </div>
+          <div class="announcement-stats">
+            <span>👁️ ${topic.views}</span>
+            <span>💬 ${topic.comments}</span>
+          </div>
+        </div>
+      `;
+    }
+    
+    return card;
+  }
+
+  // Load topics when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    loadForumTopics();
+    
+    // Refresh topics every 30 seconds to catch new posts
+    setInterval(loadForumTopics, 30000);
+  });
+</script>
 </body>
 </html>

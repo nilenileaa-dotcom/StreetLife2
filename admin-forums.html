@@ -353,20 +353,27 @@
       color: var(--text-white);
     }
 
-    /* Login Form */
-    .login-form {
-      max-width: 400px;
-      margin: 0 auto;
-      background: var(--primary-black);
-      padding: 2rem;
-      border-radius: 12px;
-      border: 1px solid var(--medium-gray);
+    /* Sync Status */
+    .sync-status {
+      background: var(--dark-gray);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--accent-color);
     }
     
-    .login-title {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: var(--text-white);
+    .sync-status p {
+      margin: 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    .sync-success {
+      border-left-color: var(--success-color);
+    }
+    
+    .sync-error {
+      border-left-color: var(--danger-color);
     }
 
     /* Footer */
@@ -444,9 +451,10 @@
         <li><a href="index.html#contact">Contact</a></li>
         <li><a href="rules.html">Server Rules</a></li>
         <li><a href="forums.html">Forums</a></li>
+        <li><a href="admin-forums.html" style="color: var(--warning-color);">Admin Panel</a></li>
       </ul>
       <a href="forums.html" class="admin-btn">
-        <span class="btn-icon"></span>
+        <span class="btn-icon">📋</span>
         View Forums
       </a>
       <div class="mobile-menu-toggle">
@@ -459,7 +467,7 @@
   <section class="hero">
     <div class="hero-content">
       <h1 class="hero-title">ADMIN PANEL</h1>
-      <p class="hero-subtitle">Manage forums and create content</p>
+      <p class="hero-subtitle">Manage forums and create content for all players</p>
     </div>
   </section>
 
@@ -471,11 +479,16 @@
         <h2 class="section-title">Forums <span class="accent">Management</span></h2>
       </div>
 
+      <!-- Sync Status -->
+      <div class="sync-status" id="syncStatus">
+        <p>🔄 <strong>Public Sharing:</strong> Topics are automatically shared with all players</p>
+      </div>
+
       <!-- Admin Navigation -->
       <div class="admin-nav">
-        <button class="admin-tab active" onclick="showAdminTab('create-topic')">Create Topic</button>
-        <button class="admin-tab" onclick="showAdminTab('manage-topics')">Manage Topics</button>
-        <button class="admin-tab" onclick="showAdminTab('admin-settings')">Settings</button>
+        <button class="admin-tab active" onclick="showAdminTab('create-topic')">📝 Create Topic</button>
+        <button class="admin-tab" onclick="showAdminTab('manage-topics')">📊 Manage Topics</button>
+        <button class="admin-tab" onclick="showAdminTab('sync-tools')">🔄 Sync Tools</button>
       </div>
 
       <!-- Create Topic Content -->
@@ -483,34 +496,34 @@
         <div class="create-topic-form">
           <form id="topicForm">
             <div class="form-group">
-              <label class="form-label" for="topicTitle">Topic Title</label>
+              <label class="form-label" for="topicTitle">📄 Topic Title</label>
               <input type="text" id="topicTitle" class="form-input" placeholder="Enter topic title..." required>
             </div>
             
             <div class="form-group">
-              <label class="form-label" for="topicCategory">Category</label>
+              <label class="form-label" for="topicCategory">📁 Category</label>
               <select id="topicCategory" class="form-select" required>
                 <option value="">Select category...</option>
-                <option value="announcement">Announcement</option>
-                <option value="update">Update</option>
-                <option value="event">Event</option>
-                <option value="important">Important</option>
+                <option value="announcement">📢 Announcement</option>
+                <option value="update">🔄 Update</option>
+                <option value="event">🎉 Event</option>
+                <option value="important">🚨 Important</option>
               </select>
             </div>
             
             <div class="form-group">
-              <label class="form-label" for="topicContent">Content</label>
+              <label class="form-label" for="topicContent">📝 Content</label>
               <textarea id="topicContent" class="form-textarea" placeholder="Enter topic content..." required></textarea>
             </div>
             
             <div class="form-group">
-              <label class="form-label" for="topicTags">Tags (comma separated)</label>
+              <label class="form-label" for="topicTags">🏷️ Tags (comma separated)</label>
               <input type="text" id="topicTags" class="form-input" placeholder="maintenance, update, event...">
             </div>
             
             <div class="form-actions">
-              <button type="reset" class="btn btn-secondary">Clear</button>
-              <button type="submit" class="btn btn-primary">Publish Topic</button>
+              <button type="reset" class="btn btn-secondary">🗑️ Clear</button>
+              <button type="submit" class="btn btn-primary">🚀 Publish Topic</button>
             </div>
           </form>
         </div>
@@ -523,33 +536,41 @@
         </div>
       </div>
 
-      <!-- Admin Settings Content -->
-      <div id="admin-settings" class="admin-content">
+      <!-- Sync Tools Content -->
+      <div id="sync-tools" class="admin-content">
         <div class="create-topic-form">
-          <h3 style="color: var(--text-white); margin-bottom: 1.5rem;">Admin Settings</h3>
+          <h3 style="color: var(--text-white); margin-bottom: 1.5rem;">🔄 Sync Tools</h3>
           
           <div class="form-group">
-            <label class="form-label" for="adminName">Admin Name</label>
-            <input type="text" id="adminName" class="form-input" value="Admin Team" placeholder="Enter admin name...">
+            <label class="form-label">📊 Current Status</label>
+            <div class="sync-status sync-success">
+              <p><strong>Public Topics:</strong> <span id="publicTopicsCount">0</span> topics visible to all players</p>
+            </div>
           </div>
           
           <div class="form-group">
-            <label class="form-label" for="adminEmail">Email</label>
-            <input type="email" id="adminEmail" class="form-input" value="admin@streetlife.com" placeholder="Enter email...">
+            <label class="form-label">📤 Export Topics</label>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">
+              Export all topics as JSON for backup or sharing:
+            </p>
+            <button type="button" class="btn btn-secondary" onclick="exportTopics()">💾 Export JSON</button>
           </div>
           
           <div class="form-group">
-            <label class="form-label" for="adminRole">Role</label>
-            <select id="adminRole" class="form-select">
-              <option value="super-admin">Super Admin</option>
-              <option value="admin" selected>Admin</option>
-              <option value="moderator">Moderator</option>
-            </select>
+            <label class="form-label">📥 Import Topics</label>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">
+              Import topics from JSON file:
+            </p>
+            <input type="file" id="importFile" class="form-input" accept=".json" style="margin-bottom: 1rem;">
+            <button type="button" class="btn btn-secondary" onclick="importTopics()">📥 Import JSON</button>
           </div>
           
-          <div class="form-actions">
-            <button type="button" class="btn btn-secondary">Reset</button>
-            <button type="button" class="btn btn-primary">Save Settings</button>
+          <div class="form-group">
+            <label class="form-label">🔄 Force Sync</label>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">
+              Manually sync topics with public storage:
+            </p>
+            <button type="button" class="btn btn-primary" onclick="forceSync()">🔄 Force Sync Now</button>
           </div>
         </div>
       </div>
@@ -565,7 +586,7 @@
           <p class="footer-text">
             SL:RP is not affiliated with or endorsed by Rockstar North, Take-Two Interactive or other rightsholders.
           </p>
-          <p class="footer-contact">Email: streetliferp@gmail.com</p>
+          <p class="footer-contact">Email: lsworldrp@gmail.com</p>
         </div>
 
         <div class="footer-col">
@@ -575,7 +596,6 @@
             <li><a href="forums.html">Forums</a></li>
             <li><a href="admin-forums.html">Admin Panel</a></li>
             <li><a href="rules.html">Server Rules</a></li>
-            <li><a href="admin-forums.html" style="color: var(--warning-color);">Admin Panel</a></li>
           </ul>
         </div>
 
@@ -610,329 +630,367 @@
     </div>
   </footer>
 
- <script>
-  // ==================== ADMIN AUTHENTICATION ====================
-  function checkAdminAuthentication() {
-    const isAuthenticated = localStorage.getItem('adminAuthenticated');
-    const loginTime = localStorage.getItem('adminLoginTime');
+  <script>
+    // ==================== PUBLIC TOPIC SHARING SYSTEM ====================
     
-    if (!isAuthenticated || !loginTime) {
-      redirectToLogin();
-      return false;
+    // Use a public storage key that all players can access
+    const PUBLIC_TOPICS_KEY = 'streetlife_public_topics';
+    
+    // Topic Management System
+    let topics = [];
+    
+    // Load topics from public storage
+    function loadPublicTopics() {
+      try {
+        const publicTopics = localStorage.getItem(PUBLIC_TOPICS_KEY);
+        if (publicTopics) {
+          topics = JSON.parse(publicTopics);
+        } else {
+          // Initialize with default topics if none exist
+          topics = getDefaultTopics();
+          savePublicTopics();
+        }
+        updatePublicTopicsCount();
+        return topics;
+      } catch (error) {
+        console.error('Error loading public topics:', error);
+        topics = getDefaultTopics();
+        savePublicTopics();
+        return topics;
+      }
     }
     
-    // Check if session is expired (24 hours)
-    const loginDate = new Date(loginTime);
-    const currentDate = new Date();
-    const hoursDiff = (currentDate - loginDate) / (1000 * 60 * 60);
-    
-    if (hoursDiff > 24) {
-      localStorage.removeItem('adminAuthenticated');
-      localStorage.removeItem('adminLoginTime');
-      redirectToLogin();
-      return false;
+    // Save topics to public storage
+    function savePublicTopics() {
+      try {
+        localStorage.setItem(PUBLIC_TOPICS_KEY, JSON.stringify(topics));
+        updatePublicTopicsCount();
+        showNotification('✅ Topics saved and shared with all players!', 'success');
+        return true;
+      } catch (error) {
+        console.error('Error saving public topics:', error);
+        showNotification('❌ Error saving topics', 'error');
+        return false;
+      }
     }
     
-    return true;
-  }
-  
-  function redirectToLogin() {
-    window.location.href = 'admin-login.html';
-  }
-  
-  function logout() {
-    localStorage.removeItem('adminAuthenticated');
-    localStorage.removeItem('adminLoginTime');
-    redirectToLogin();
-  }
+    // Get default topics
+    function getDefaultTopics() {
+      return [
+        {
+          id: 1,
+          title: "🚀 Welcome to Street Life RP!",
+          category: "announcement",
+          content: "Welcome to our community! This is the official forums for Street Life Roleplay.\n\nCheck back regularly for server updates, events, and announcements.",
+          tags: "welcome, community, introduction",
+          date: "Just now",
+          views: 0,
+          comments: 0,
+          author: "Admin Team",
+          badge: "Welcome"
+        }
+      ];
+    }
+    
+    // Update public topics count display
+    function updatePublicTopicsCount() {
+      const countElement = document.getElementById('publicTopicsCount');
+      if (countElement) {
+        countElement.textContent = topics.length;
+      }
+    }
+    
+    // ==================== ADMIN FUNCTIONALITY ====================
+    
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
 
-  // ==================== MAIN ADMIN FUNCTIONALITY ====================
-  
-  // Mobile menu toggle
-  const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-  const navLinks = document.querySelector('.nav-links');
-
-  if (mobileMenuToggle && navLinks) {
-    mobileMenuToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      mobileMenuToggle.classList.toggle('active');
-    });
-
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        mobileMenuToggle.classList.remove('active');
+    if (mobileMenuToggle && navLinks) {
+      mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileMenuToggle.classList.toggle('active');
       });
-    });
-  }
 
-  // Admin tab functionality
-  function showAdminTab(tabId) {
-    if (!checkAdminAuthentication()) return;
-    
-    document.querySelectorAll('.admin-content').forEach(content => {
-      content.classList.remove('active');
-    });
-    
-    document.querySelectorAll('.admin-tab').forEach(tab => {
-      tab.classList.remove('active');
-    });
-    
-    document.getElementById(tabId).classList.add('active');
-    event.target.classList.add('active');
-    
-    if (tabId === 'manage-topics') {
-      loadTopics();
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          mobileMenuToggle.classList.remove('active');
+        });
+      });
     }
-  }
 
-  // Topic Management System
-  let topics = JSON.parse(localStorage.getItem('forumTopics')) || [
-    {
-      id: 1,
-      title: "🚀 Server Maintenance - March 15",
-      category: "announcement",
-      content: "We will be performing scheduled server maintenance on March 15th from 2:00 AM to 4:00 AM EST. During this time, the server will be temporarily unavailable. This maintenance includes performance optimizations and security updates.\n\nWe appreciate your patience and understanding as we work to improve your gaming experience.",
-      tags: "maintenance, server, update",
-      date: "2 days ago",
-      views: 128,
-      comments: 24,
-      author: "Admin Team",
-      badge: "Important"
+    // Admin tab functionality
+    function showAdminTab(tabId) {
+      document.querySelectorAll('.admin-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+      
+      if (tabId === 'manage-topics') {
+        loadTopics();
+      } else if (tabId === 'sync-tools') {
+        updatePublicTopicsCount();
+      }
     }
-    // ... other default topics
-  ];
 
-  function saveTopics() {
-    localStorage.setItem('forumTopics', JSON.stringify(topics));
-    updateForumsPage();
-  }
-
-  document.getElementById('topicForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (!checkAdminAuthentication()) return;
-    
-    const title = document.getElementById('topicTitle').value;
-    const category = document.getElementById('topicCategory').value;
-    const content = document.getElementById('topicContent').value;
-    const tags = document.getElementById('topicTags').value;
-    
-    const editingTopicId = this.dataset.editingTopicId;
-    
-    if (editingTopicId) {
-      const topicIndex = topics.findIndex(t => t.id == editingTopicId);
-      if (topicIndex !== -1) {
-        topics[topicIndex] = {
-          ...topics[topicIndex],
+    // Topic form submission
+    document.getElementById('topicForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('topicTitle').value;
+      const category = document.getElementById('topicCategory').value;
+      const content = document.getElementById('topicContent').value;
+      const tags = document.getElementById('topicTags').value;
+      
+      const editingTopicId = this.dataset.editingTopicId;
+      
+      if (editingTopicId) {
+        // Update existing topic
+        const topicIndex = topics.findIndex(t => t.id == editingTopicId);
+        if (topicIndex !== -1) {
+          topics[topicIndex] = {
+            ...topics[topicIndex],
+            title: title,
+            category: category,
+            content: content,
+            tags: tags,
+            badge: getBadgeForCategory(category),
+            date: "Updated just now"
+          };
+          savePublicTopics();
+          
+          delete this.dataset.editingTopicId;
+          this.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
+        }
+      } else {
+        // Create new topic
+        const newTopic = {
+          id: Date.now(),
           title: title,
           category: category,
           content: content,
           tags: tags,
-          badge: getBadgeForCategory(category),
-          date: "Updated just now"
+          date: "Just now",
+          views: 0,
+          comments: 0,
+          author: "Admin Team",
+          badge: getBadgeForCategory(category)
         };
-        saveTopics();
-        showNotification(`✅ Topic "${title}" updated successfully!`, 'success');
         
-        delete this.dataset.editingTopicId;
-        this.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
+        topics.unshift(newTopic);
+        savePublicTopics();
       }
-    } else {
-      const newTopic = {
-        id: Date.now(),
-        title: title,
-        category: category,
-        content: content,
-        tags: tags,
-        date: "Just now",
-        views: 0,
-        comments: 0,
-        author: "Admin Team",
-        badge: getBadgeForCategory(category)
-      };
       
-      topics.unshift(newTopic);
-      saveTopics();
-      showNotification(`✅ Topic "${title}" created successfully!`, 'success');
-    }
-    
-    this.reset();
-    showAdminTab('manage-topics');
-  });
-
-  function getBadgeForCategory(category) {
-    const badges = {
-      'announcement': '📢 Announcement',
-      'update': '🔄 Update', 
-      'event': '🎉 Event',
-      'important': '🚨 Important'
-    };
-    return badges[category] || '📋 Info';
-  }
-
-  function loadTopics() {
-    if (!checkAdminAuthentication()) return;
-    
-    const topicsList = document.getElementById('topicsListContainer');
-    topicsList.innerHTML = '';
-    
-    if (topics.length === 0) {
-      topicsList.innerHTML = '<div class="topic-item"><div class="topic-info"><h4>No topics yet</h4><p>Create your first topic using the "Create Topic" tab!</p></div></div>';
-      return;
-    }
-    
-    const sortedTopics = topics.sort((a, b) => b.id - a.id);
-    
-    sortedTopics.forEach(topic => {
-      const topicItem = document.createElement('div');
-      topicItem.className = 'topic-item';
-      topicItem.innerHTML = `
-        <div class="topic-info">
-          <h4>${topic.title}</h4>
-          <div class="topic-meta">
-            <span>📅 ${topic.date}</span>
-            <span>👁️ ${topic.views}</span>
-            <span>💬 ${topic.comments}</span>
-            <span class="topic-badge badge-${topic.category}">${topic.badge}</span>
-          </div>
-        </div>
-        <div class="topic-actions">
-          <button class="action-btn" onclick="editTopic(${topic.id})" title="Edit">✏️</button>
-          <button class="action-btn" onclick="deleteTopic(${topic.id})" title="Delete">🗑️</button>
-        </div>
-      `;
-      topicsList.appendChild(topicItem);
+      this.reset();
+      showAdminTab('manage-topics');
     });
-  }
 
-  function editTopic(topicId) {
-    if (!checkAdminAuthentication()) return;
-    
-    const topic = topics.find(t => t.id === topicId);
-    if (!topic) return;
-    
-    document.getElementById('topicTitle').value = topic.title;
-    document.getElementById('topicCategory').value = topic.category;
-    document.getElementById('topicContent').value = topic.content;
-    document.getElementById('topicTags').value = topic.tags;
-    
-    showAdminTab('create-topic');
-    
-    const form = document.getElementById('topicForm');
-    const submitBtn = form.querySelector('button[type="submit"]');
-    
-    form.dataset.editingTopicId = topicId;
-    submitBtn.textContent = '💾 Update Topic';
-    
-    document.getElementById('create-topic').scrollIntoView({ behavior: 'smooth' });
-    
-    showNotification(`✏️ Editing: "${topic.title}"`, 'info');
-  }
-
-  function deleteTopic(topicId) {
-    if (!checkAdminAuthentication()) return;
-    
-    const topic = topics.find(t => t.id === topicId);
-    if (!topic) return;
-    
-    if (confirm(`🗑️ Are you sure you want to delete "${topic.title}"? This action cannot be undone.`)) {
-      topics = topics.filter(t => t.id !== topicId);
-      saveTopics();
-      loadTopics();
-      showNotification(`✅ Topic deleted successfully!`, 'success');
+    function getBadgeForCategory(category) {
+      const badges = {
+        'announcement': '📢 Announcement',
+        'update': '🔄 Update', 
+        'event': '🎉 Event',
+        'important': '🚨 Important'
+      };
+      return badges[category] || '📋 Info';
     }
-  }
 
-  function updateForumsPage() {
-    console.log('📊 Forums data updated - topics count:', topics.length);
-  }
+    // Load topics into management list
+    function loadTopics() {
+      const topicsList = document.getElementById('topicsListContainer');
+      topicsList.innerHTML = '';
+      
+      if (topics.length === 0) {
+        topicsList.innerHTML = '<div class="topic-item"><div class="topic-info"><h4>No topics yet</h4><p>Create your first topic using the "Create Topic" tab!</p></div></div>';
+        return;
+      }
+      
+      const sortedTopics = topics.sort((a, b) => b.id - a.id);
+      
+      sortedTopics.forEach(topic => {
+        const topicItem = document.createElement('div');
+        topicItem.className = 'topic-item';
+        topicItem.innerHTML = `
+          <div class="topic-info">
+            <h4>${topic.title}</h4>
+            <div class="topic-meta">
+              <span>📅 ${topic.date}</span>
+              <span>👁️ ${topic.views}</span>
+              <span>💬 ${topic.comments}</span>
+              <span class="topic-badge badge-${topic.category}">${topic.badge}</span>
+            </div>
+          </div>
+          <div class="topic-actions">
+            <button class="action-btn" onclick="editTopic(${topic.id})" title="Edit">✏️</button>
+            <button class="action-btn" onclick="deleteTopic(${topic.id})" title="Delete">🗑️</button>
+          </div>
+        `;
+        topicsList.appendChild(topicItem);
+      });
+    }
 
-  // Notification system
-  function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--danger-color)' : 'var(--accent-color)'};
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      z-index: 10000;
-      animation: slideInRight 0.3s ease;
-    `;
-    notification.textContent = message;
+    // Edit topic function
+    function editTopic(topicId) {
+      const topic = topics.find(t => t.id === topicId);
+      if (!topic) return;
+      
+      document.getElementById('topicTitle').value = topic.title;
+      document.getElementById('topicCategory').value = topic.category;
+      document.getElementById('topicContent').value = topic.content;
+      document.getElementById('topicTags').value = topic.tags;
+      
+      showAdminTab('create-topic');
+      
+      const form = document.getElementById('topicForm');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      
+      form.dataset.editingTopicId = topicId;
+      submitBtn.textContent = '💾 Update Topic';
+      
+      document.getElementById('create-topic').scrollIntoView({ behavior: 'smooth' });
+      
+      showNotification(`✏️ Editing: "${topic.title}"`, 'info');
+    }
+
+    // Delete topic function
+    function deleteTopic(topicId) {
+      const topic = topics.find(t => t.id === topicId);
+      if (!topic) return;
+      
+      if (confirm(`🗑️ Are you sure you want to delete "${topic.title}"? This action cannot be undone.`)) {
+        topics = topics.filter(t => t.id !== topicId);
+        savePublicTopics();
+        loadTopics();
+      }
+    }
+
+    // ==================== SYNC TOOLS ====================
     
-    document.body.appendChild(notification);
+    // Export topics as JSON
+    function exportTopics() {
+      const dataStr = JSON.stringify(topics, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const exportFileDefaultName = `streetlife_topics_${new Date().toISOString().split('T')[0]}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+      
+      showNotification('💾 Topics exported successfully!', 'success');
+    }
     
-    setTimeout(() => {
-      notification.style.animation = 'slideOutRight 0.3s ease';
-      setTimeout(() => {
-        if (document.body.contains(notification)) {
-          document.body.removeChild(notification);
+    // Import topics from JSON
+    function importTopics() {
+      const fileInput = document.getElementById('importFile');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        showNotification('❌ Please select a JSON file to import', 'error');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedTopics = JSON.parse(e.target.result);
+          
+          if (Array.isArray(importedTopics)) {
+            // Merge imported topics with existing ones
+            importedTopics.forEach(topic => {
+              // Generate new ID for imported topics to avoid conflicts
+              topic.id = Date.now() + Math.random();
+              topics.unshift(topic);
+            });
+            
+            savePublicTopics();
+            loadTopics();
+            showNotification(`📥 Successfully imported ${importedTopics.length} topics!`, 'success');
+            fileInput.value = '';
+          } else {
+            showNotification('❌ Invalid topics format in JSON file', 'error');
+          }
+        } catch (error) {
+          showNotification('❌ Error parsing JSON file', 'error');
+          console.error('Import error:', error);
         }
-      }, 300);
-    }, 3000);
-  }
-
-  // Add CSS for notifications
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideInRight {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOutRight {
-      from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(100%); opacity: 0; }
+      };
+      reader.readAsText(file);
     }
     
-    .logout-btn {
-      background: var(--danger-color) !important;
-      margin-left: 0.5rem;
+    // Force sync
+    function forceSync() {
+      savePublicTopics();
+      showNotification('🔄 Topics synced with public storage!', 'success');
     }
+
+    // ==================== NOTIFICATION SYSTEM ====================
     
-    .logout-btn:hover {
-      background: #c82333 !important;
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--danger-color)' : 'var(--accent-color)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        z-index: 10000;
+        animation: slideInRight 0.3s ease;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          if (document.body.contains(notification)) {
+            document.body.removeChild(notification);
+          }
+        }, 300);
+      }, 3000);
     }
-  `;
-  document.head.appendChild(style);
 
-  // Add logout button to navigation
-  function addLogoutButton() {
-    const navContainer = document.querySelector('.nav-container');
-    const logoutBtn = document.createElement('a');
-    logoutBtn.href = '#';
-    logoutBtn.className = 'admin-btn logout-btn';
-    logoutBtn.innerHTML = '<span class="btn-icon"></span>Logout';
-    logoutBtn.onclick = function(e) {
-      e.preventDefault();
-      logout();
-    };
-    navContainer.appendChild(logoutBtn);
-  }
+    // Add CSS for notifications
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
 
-  // Initialize admin panel
-  document.addEventListener('DOMContentLoaded', function() {
-    if (checkAdminAuthentication()) {
-      addLogoutButton();
+    // Initialize admin panel
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load topics from public storage
+      topics = loadPublicTopics();
       loadTopics();
       showNotification('🔐 Welcome to Admin Panel!', 'info');
-    }
-  });
+    });
 
-  document.querySelector('button[type="reset"]').addEventListener('click', function() {
-    const form = document.getElementById('topicForm');
-    delete form.dataset.editingTopicId;
-    form.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
-    showNotification('🔄 Form cleared!', 'info');
-  });
-
-  document.querySelector('#admin-settings .btn-primary').addEventListener('click', function() {
-    if (!checkAdminAuthentication()) return;
-    showNotification('✅ Settings saved successfully!', 'success');
-  });
-</script>
+    // Form reset handler
+    document.querySelector('button[type="reset"]').addEventListener('click', function() {
+      const form = document.getElementById('topicForm');
+      delete form.dataset.editingTopicId;
+      form.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
+      showNotification('🔄 Form cleared!', 'info');
+    });
+  </script>
 </body>
 </html>
