@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Forums - Street Life: Roleplay</title>
+  <link rel="icon" href="https://i.imgur.com/aOZb91M.png"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* Reset and Base Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary-black: #0a0a0a;
+      --secondary-black: #1a1a1a;
+      --dark-gray: #2a2a2a;
+      --medium-gray: #404040;
+      --light-gray: #808080;
+      --text-white: #ffffff;
+      --text-light: #e0e0e0;
+      --accent-color: #8b959b;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--primary-black);
+      color: var(--text-white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #171515; }
+    ::-webkit-scrollbar-thumb { background: #404244; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #6f6f6f; }
+
+    /* Navigation */
+    .navbar {
+      position: fixed; top: 0; width: 100%;
+      padding: 0rem 1rem;
+      backdrop-filter: blur(1px); z-index: 1000; transition: all .3s ease;
+      background: rgba(10, 10, 10, 0.98);
+    }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+    .logo img { height: 60px; width: auto; transition: transform .3s ease; }
+    .logo img:hover { transform: scale(1.05); }
+    .nav-links { display: flex; list-style: none; gap: 2rem; }
+    .nav-links a {
+      color: var(--text-light); text-decoration: none; font-weight: 400; transition: all .3s ease; position: relative;
+    }
+    .nav-links a:hover { color: var(--text-white); }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--text-white); transition: width .3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    
+    /* Admin Panel Button */
+    .admin-btn {
+      background: linear-gradient(135deg, var(--warning-color) 0%, #e0a800 100%);
+      color: var(--primary-black);
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 8px;
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+    }
+    
+    .mobile-menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
+    .mobile-menu-toggle span { width: 25px; height: 3px; background: var(--text-white); transition: all .3s ease; }
+
+    /* Hero Section */
+    .hero {
+      height: 30vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative;
+      background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.8)), url('https://ext.same-assets.com/1146120813/679993928.gif');
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      margin-top: 80px;
+    }
+    .hero-content { max-width: 800px; padding: 0 2rem; }
+    .hero-title {
+      font-family: 'Jost', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 600; margin-bottom: 1rem;
+      color: var(--text-white); letter-spacing: 4px; text-shadow: 2px 2px 5px rgba(0,0,0,.8); text-transform: uppercase;
+    }
+    .hero-subtitle {
+      font-family: 'Jost', sans-serif; font-size: clamp(1rem, 3vw, 1.5rem); font-weight: 500; color: var(--light-gray);
+      margin-bottom: 3rem; letter-spacing: 1px;
+    }
+
+    /* Admin Panel Section */
+    .admin-section {
+      padding: 5rem 0;
+      background: var(--secondary-black);
+      min-height: 70vh;
+    }
+    
+    .admin-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    
+    .section-label {
+      color: #666;
+      font-size: .8rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    
+    .section-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      line-height: 1.2;
+      color: var(--text-white);
+    }
+    
+    .section-title.accent { 
+      color: var(--accent-color); 
+    }
+
+    /* Admin Navigation */
+    .admin-nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--medium-gray);
+    }
+    
+    .admin-tab {
+      background: transparent;
+      color: var(--text-light);
+      border: none;
+      padding: 1rem 2rem;
+      font-family: 'Jost', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .admin-tab.active {
+      color: var(--text-white);
+      border-bottom: 3px solid var(--warning-color);
+    }
+    
+    .admin-tab:hover {
+      color: var(--text-white);
+    }
+
+    /* Admin Content */
+    .admin-content {
+      display: none;
+    }
+    
+    .admin-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* Create Topic Form */
+    .create-topic-form {
+      background: var(--primary-black);
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid var(--medium-gray);
+      margin-bottom: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--dark-gray);
+      border: 1px solid var(--medium-gray);
+      border-radius: 6px;
+      color: var(--text-white);
+      font-family: 'Jost', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(139, 149, 155, 0.2);
+    }
+    
+    .form-textarea {
+      min-height: 200px;
+      resize: vertical;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Jost', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: var(--success-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: var(--medium-gray);
+      color: var(--text-white);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--light-gray);
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger {
+      background: var(--danger-color);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+
+    /* Manage Topics */
+    .topics-list {
+      background: var(--primary-black);
+      border-radius: 12px;
+      border: 1px solid var(--medium-gray);
+      overflow: hidden;
+    }
+    
+    .topic-item {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--medium-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+    
+    .topic-item:hover {
+      background: rgba(139, 149, 155, 0.1);
+    }
+    
+    .topic-item:last-child {
+      border-bottom: none;
+    }
+    
+    .topic-info h4 {
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .topic-meta {
+      color: var(--light-gray);
+      font-size: 0.9rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .topic-badge {
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .badge-announcement { background: var(--accent-color); color: white; }
+    .badge-update { background: var(--success-color); color: white; }
+    .badge-event { background: var(--warning-color); color: black; }
+    .badge-important { background: var(--danger-color); color: white; }
+    
+    .topic-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .action-btn {
+      padding: 0.5rem;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+    }
+    
+    .action-btn:hover {
+      background: var(--medium-gray);
+      color: var(--text-white);
+    }
+
+    /* Login Form */
+    .login-form {
+      max-width: 400px;
+      margin: 0 auto;
+      background: var(--primary-black);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--medium-gray);
+    }
+    
+    .login-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--text-white);
+    }
+
+    /* Footer */
+    .footer { background: var(--primary-black); border-top: 1px solid rgba(64,66,68,.2); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; padding: 3rem 0; }
+    .footer-title { color: #fff; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 600; }
+    .footer-heading { color: #fff; font-size: 1rem; margin-bottom: 1rem; font-weight: 600; }
+    .footer-text { color: #888; font-size: .9rem; line-height: 1.5; margin-bottom: 1rem; }
+    .footer-contact { color: #888; font-size: .9rem; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: .5rem; }
+    .footer-links a { color: #888; text-decoration: none; font-size: .9rem; transition: color .3s ease; }
+    .footer-links a:hover { color: #fff; }
+    .social-links { display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .social-link {
+      display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #888; text-decoration: none; transition: all .3s ease; font-size: 1.2rem;
+    }
+    .social-link:hover { background: #3a3a3a; color: #fff; border-color: #666; }
+    .social-link img { width: 20px; height: 20px; }
+    .footer-bottom { text-align: center; padding: 1.5rem 0; }
+    .footer-bottom p { color: #333333; font-size: .85rem; }
+    
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px);} to { opacity: 1; transform: translateY(0);} }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .mobile-menu-toggle { display: flex; }
+      .nav-links {
+        position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10,10,10,.98);
+        flex-direction: column; padding: 2rem; transform: translateY(-100%); opacity: 0; visibility: hidden; transition: all .3s ease;
+      }
+      .nav-links.active { transform: translateY(0); opacity: 1; visibility: visible; }
+      .navbar { padding: 1rem; }
+      .admin-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+        margin-left: 0.5rem;
+      }
+      .hero { height: 25vh; margin-top: 70px; }
+      .hero-content { padding: 0 1rem; }
+      .admin-section { padding: 3rem 0; }
+      .section-title { font-size: 2rem; }
+      .admin-nav { flex-direction: column; }
+      .admin-tab { text-align: left; }
+      .create-topic-form { padding: 1.5rem; }
+      .topic-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .topic-actions { align-self: flex-end; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .mobile-menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+      .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
+      .mobile-menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+    }
+    
+    @media (max-width: 480px) {
+      .container { padding: 0 1rem; }
+      .hero-title { letter-spacing: 1px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="index.html">
+          <img src="https://i.imgur.com/aOZb91M.png" alt="Street Life Logo">
+        </a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#community">Community</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="rules.html">Server Rules</a></li>
+        <li><a href="forums.html">Forums</a></li>
+        <li><a href="admin-forums.html" style="color: var(--warning-color);">Admin Panel</a></li>
+      </ul>
+      <a href="forums.html" class="admin-btn">
+        <span class="btn-icon"></span>
+        View Forums
+      </a>
+      <div class="mobile-menu-toggle">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">ADMIN PANEL</h1>
+      <p class="hero-subtitle">Manage forums and create content</p>
+    </div>
+  </section>
+
+  <!-- Admin Section -->
+  <section class="admin-section">
+    <div class="container admin-container">
+      <div class="section-header">
+        <p class="section-label">Street Life Administration</p>
+        <h2 class="section-title">Forums <span class="accent">Management</span></h2>
+      </div>
+
+      <!-- Admin Navigation -->
+      <div class="admin-nav">
+        <button class="admin-tab active" onclick="showAdminTab('create-topic')">Create Topic</button>
+        <button class="admin-tab" onclick="showAdminTab('manage-topics')">Manage Topics</button>
+        <button class="admin-tab" onclick="showAdminTab('admin-settings')">Settings</button>
+      </div>
+
+      <!-- Create Topic Content -->
+      <div id="create-topic" class="admin-content active">
+        <div class="create-topic-form">
+          <form id="topicForm">
+            <div class="form-group">
+              <label class="form-label" for="topicTitle">Topic Title</label>
+              <input type="text" id="topicTitle" class="form-input" placeholder="Enter topic title..." required>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="topicCategory">Category</label>
+              <select id="topicCategory" class="form-select" required>
+                <option value="">Select category...</option>
+                <option value="announcement">Announcement</option>
+                <option value="update">Update</option>
+                <option value="event">Event</option>
+                <option value="important">Important</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="topicContent">Content</label>
+              <textarea id="topicContent" class="form-textarea" placeholder="Enter topic content..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="topicTags">Tags (comma separated)</label>
+              <input type="text" id="topicTags" class="form-input" placeholder="maintenance, update, event...">
+            </div>
+            
+            <div class="form-actions">
+              <button type="reset" class="btn btn-secondary">Clear</button>
+              <button type="submit" class="btn btn-primary">Publish Topic</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Manage Topics Content -->
+      <div id="manage-topics" class="admin-content">
+        <div class="topics-list" id="topicsListContainer">
+          <!-- Topics will be loaded here by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Admin Settings Content -->
+      <div id="admin-settings" class="admin-content">
+        <div class="create-topic-form">
+          <h3 style="color: var(--text-white); margin-bottom: 1.5rem;">Admin Settings</h3>
+          
+          <div class="form-group">
+            <label class="form-label" for="adminName">Admin Name</label>
+            <input type="text" id="adminName" class="form-input" value="Admin Team" placeholder="Enter admin name...">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="adminEmail">Email</label>
+            <input type="email" id="adminEmail" class="form-input" value="admin@streetlife.com" placeholder="Enter email...">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="adminRole">Role</label>
+            <select id="adminRole" class="form-select">
+              <option value="super-admin">Super Admin</option>
+              <option value="admin" selected>Admin</option>
+              <option value="moderator">Moderator</option>
+            </select>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary">Reset</button>
+            <button type="button" class="btn btn-primary">Save Settings</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4 class="footer-title">SL:RP</h4>
+          <p class="footer-text">
+            SL:RP is not affiliated with or endorsed by Rockstar North, Take-Two Interactive or other rightsholders.
+          </p>
+          <p class="footer-contact">Email: lsworldrp@gmail.com</p>
+        </div>
+
+        <div class="footer-col">
+          <h5 class="footer-heading">Links & Resources</h5>
+          <ul class="footer-links">   
+            <li><a href="https://discord.gg/kREf2ueuKN" target="_blank" rel="noopener noreferrer">Discord</a></li>
+            <li><a href="forums.html">Forums</a></li>
+            <li><a href="admin-forums.html">Admin Panel</a></li>
+            <li><a href="rules.html">Server Rules</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5 class="footer-heading">Need Help?</h5>
+          <ul class="footer-links">
+            <li><a href="https://discord.gg/cCz8PJ42Uw" target="_blank" rel="noopener noreferrer">Terms & Conditions</a></li>
+            <li><a href="https://discord.gg/cCz8PJ42Uw" target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>
+            <li><a href="https://discord.gg/cCz8PJ42Uw" target="_blank" rel="noopener noreferrer">Appeal Ban</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5 class="footer-heading">Follow us</h5>
+          <div class="social-links">
+            <!-- TikTok -->
+            <a href="https://www.tiktok.com/@street_life_1" class="social-link" target="_blank" rel="noopener noreferrer">
+              <img src="https://ext.same-assets.com/1146120813/1242780993.svg" alt="TikTok">
+            </a>
+            <!-- Discord -->
+            <a href="https://discord.gg/kREf2ueuKN" class="social-link" target="_blank" rel="noopener noreferrer">
+              <svg width="20" height="20" viewBox="0 0 71 55" fill="none">
+                <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z" fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Copyright © 2025 Street Life All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuToggle && navLinks) {
+      mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileMenuToggle.classList.toggle('active');
+      });
+
+      // Close mobile menu when clicking on links
+      document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          mobileMenuToggle.classList.remove('active');
+        });
+      });
+    }
+
+    // Admin tab functionality
+    function showAdminTab(tabId) {
+      // Hide all admin content
+      document.querySelectorAll('.admin-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Remove active class from all tabs
+      document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected admin content
+      document.getElementById(tabId).classList.add('active');
+      
+      // Add active class to clicked tab
+      event.target.classList.add('active');
+      
+      // If showing manage topics, refresh the list
+      if (tabId === 'manage-topics') {
+        loadTopics();
+      }
+    }
+
+    // Topic Management System
+    let topics = JSON.parse(localStorage.getItem('forumTopics')) || [
+      {
+        id: 1,
+        title: "Server Maintenance - March 15",
+        category: "announcement",
+        content: "We will be performing scheduled server maintenance on March 15th from 2:00 AM to 4:00 AM EST. During this time, the server will be temporarily unavailable. This maintenance includes performance optimizations and security updates.\n\nWe appreciate your patience and understanding as we work to improve your gaming experience.",
+        tags: "maintenance, server, update",
+        date: "2 days ago",
+        views: 128,
+        comments: 24,
+        author: "Admin Team",
+        badge: "Important"
+      },
+      {
+        id: 2,
+        title: "New Faction Applications Open",
+        category: "announcement", 
+        content: "We are now accepting applications for new official factions! If your group is interested in becoming an recognized faction within Street Life RP, now is your chance.\n\nRequirements include:\n- Minimum of 5 active members\n- Clear faction concept and goals\n- Willingness to follow server rules\n- Active participation in server events",
+        tags: "factions, applications, opportunity",
+        date: "1 week ago",
+        views: 342,
+        comments: 56,
+        author: "Faction Management",
+        badge: "Opportunity"
+      },
+      {
+        id: 3,
+        title: "Community Event: Grand Theft Auto Show",
+        category: "event",
+        content: "Get your engines ready! This Saturday we're hosting our monthly Grand Theft Auto Show at the Legion Square. Show off your customized vehicles and compete for prizes in various categories:\n\n- Best Overall Vehicle\n- Most Creative Design\n- Best Performance Mods\n- People's Choice Award\n\nEvent starts at 8:00 PM EST. Don't miss out!",
+        tags: "event, cars, competition",
+        date: "3 days ago",
+        views: 215,
+        comments: 42,
+        author: "Event Coordinator",
+        badge: "Event"
+      },
+      {
+        id: 4,
+        title: "Economic System Overhaul",
+        category: "update",
+        content: "We've completely revamped the server's economic system to provide a more balanced and realistic experience. The changes include adjusted pricing for vehicles, properties, and businesses.",
+        tags: "economy, update, system",
+        date: "March 10, 2025",
+        views: 189,
+        comments: 31,
+        author: "Development Team",
+        badge: "v2.1.3"
+      },
+      {
+        id: 5,
+        title: "New Vehicle Pack Released",
+        category: "update",
+        content: "Introducing 15 new custom vehicles to enhance your roleplay experience! This update brings a variety of cars, motorcycles, and specialty vehicles to the streets of Los Santos.",
+        tags: "vehicles, update, content",
+        date: "March 3, 2025",
+        views: 267,
+        comments: 48,
+        author: "Development Team",
+        badge: "v2.1.2"
+      }
+    ];
+
+    // Save topics to localStorage
+    function saveTopics() {
+      localStorage.setItem('forumTopics', JSON.stringify(topics));
+      // Also update the forums page
+      updateForumsPage();
+    }
+
+    // Topic form submission
+    document.getElementById('topicForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('topicTitle').value;
+      const category = document.getElementById('topicCategory').value;
+      const content = document.getElementById('topicContent').value;
+      const tags = document.getElementById('topicTags').value;
+      
+      // Check if we're editing an existing topic
+      const editingTopicId = this.dataset.editingTopicId;
+      
+      if (editingTopicId) {
+        // Update existing topic
+        const topicIndex = topics.findIndex(t => t.id == editingTopicId);
+        if (topicIndex !== -1) {
+          topics[topicIndex] = {
+            ...topics[topicIndex],
+            title: title,
+            category: category,
+            content: content,
+            tags: tags,
+            badge: getBadgeForCategory(category),
+            date: "Updated just now"
+          };
+          saveTopics();
+          showNotification(`Topic "${title}" updated successfully!`, 'success');
+          
+          // Reset form mode
+          delete this.dataset.editingTopicId;
+          this.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
+        }
+      } else {
+        // Create new topic
+        const newTopic = {
+          id: Date.now(), // Unique ID based on timestamp
+          title: title,
+          category: category,
+          content: content,
+          tags: tags,
+          date: "Just now",
+          views: 0,
+          comments: 0,
+          author: "Admin Team",
+          badge: getBadgeForCategory(category)
+        };
+        
+        topics.unshift(newTopic); // Add to beginning of array
+        saveTopics();
+        showNotification(`Topic "${title}" created successfully!`, 'success');
+      }
+      
+      // Reset form
+      this.reset();
+      showAdminTab('manage-topics');
+    });
+
+    function getBadgeForCategory(category) {
+      const badges = {
+        'announcement': 'Announcement',
+        'update': 'Update', 
+        'event': 'Event',
+        'important': 'Important'
+      };
+      return badges[category] || ' Info';
+    }
+
+    // Load topics into management list
+    function loadTopics() {
+      const topicsList = document.getElementById('topicsListContainer');
+      topicsList.innerHTML = '';
+      
+      if (topics.length === 0) {
+        topicsList.innerHTML = '<div class="topic-item"><div class="topic-info"><h4>No topics yet</h4><p>Create your first topic using the "Create Topic" tab!</p></div></div>';
+        return;
+      }
+      
+      // Sort by ID (newest first)
+      const sortedTopics = topics.sort((a, b) => b.id - a.id);
+      
+      sortedTopics.forEach(topic => {
+        const topicItem = document.createElement('div');
+        topicItem.className = 'topic-item';
+        topicItem.innerHTML = `
+          <div class="topic-info">
+            <h4>${topic.title}</h4>
+            <div class="topic-meta">
+              <span> ${topic.date}</span>
+              <span> ${topic.views}</span>
+              <span> ${topic.comments}</span>
+              <span class="topic-badge badge-${topic.category}">${topic.badge}</span>
+            </div>
+          </div>
+          <div class="topic-actions">
+            <button class="action-btn" onclick="editTopic(${topic.id})" title="Edit">✏️</button>
+            <button class="action-btn" onclick="deleteTopic(${topic.id})" title="Delete">🗑️</button>
+          </div>
+        `;
+        topicsList.appendChild(topicItem);
+      });
+    }
+
+    // Edit topic function
+    function editTopic(topicId) {
+      const topic = topics.find(t => t.id === topicId);
+      if (!topic) return;
+      
+      // Fill the form with topic data
+      document.getElementById('topicTitle').value = topic.title;
+      document.getElementById('topicCategory').value = topic.category;
+      document.getElementById('topicContent').value = topic.content;
+      document.getElementById('topicTags').value = topic.tags;
+      
+      // Switch to create topic tab
+      showAdminTab('create-topic');
+      
+      // Change form to update mode
+      const form = document.getElementById('topicForm');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      
+      // Store the topic ID we're editing
+      form.dataset.editingTopicId = topicId;
+      submitBtn.textContent = '💾 Update Topic';
+      
+      // Scroll to form
+      document.getElementById('create-topic').scrollIntoView({ behavior: 'smooth' });
+      
+      showNotification(`✏️ Editing: "${topic.title}"`, 'info');
+    }
+
+    // Delete topic function
+    function deleteTopic(topicId) {
+      const topic = topics.find(t => t.id === topicId);
+      if (!topic) return;
+      
+      if (confirm(`🗑️ Are you sure you want to delete "${topic.title}"? This action cannot be undone.`)) {
+        topics = topics.filter(t => t.id !== topicId);
+        saveTopics();
+        loadTopics();
+        showNotification(`✅ Topic deleted successfully!`, 'success');
+      }
+    }
+
+    // Update forums page with new topics
+    function updateForumsPage() {
+      console.log('📊 Forums data updated - topics count:', topics.length);
+    }
+
+    // Notification system
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--danger-color)' : 'var(--accent-color)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        z-index: 10000;
+        animation: slideInRight 0.3s ease;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // Add CSS for notifications
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Check if user is admin (simplified version)
+    function checkAdminAccess() {
+      // For demo purposes, we'll allow access
+      // In real application, check server-side authentication
+      const isAdmin = true; // Always true for demo
+      
+      if (!isAdmin) {
+        showNotification('🔒 Admin access required! Redirecting...', 'error');
+        setTimeout(() => {
+          window.location.href = 'forums.html';
+        }, 2000);
+        return false;
+      }
+      return true;
+    }
+
+    // Initialize admin panel
+    document.addEventListener('DOMContentLoaded', function() {
+      if (checkAdminAccess()) {
+        loadTopics();
+        showNotification('👋 Welcome to Admin Panel!', 'info');
+      }
+    });
+
+    // Form reset handler
+    document.querySelector('button[type="reset"]').addEventListener('click', function() {
+      const form = document.getElementById('topicForm');
+      delete form.dataset.editingTopicId;
+      form.querySelector('button[type="submit"]').textContent = '🚀 Publish Topic';
+      showNotification('🔄 Form cleared!', 'info');
+    });
+
+    // Settings save handler
+    document.querySelector('#admin-settings .btn-primary').addEventListener('click', function() {
+      showNotification('✅ Settings saved successfully!', 'success');
+    });
+  </script>
+</body>
+</html>

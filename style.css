@@ -275,11 +275,11 @@ body {
 .nav-links a {
   color: var(--text-light); text-decoration: none; font-weight: 400; transition: all .3s ease; position: relative;
 }
-.nav-links a:hover { color: var(--text-white); }
-.nav-links a::after {
-  content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--text-white); transition: width .3s ease;
-}
-.nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { color: var(--text-white); }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--text-white); transition: width .3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
 .mobile-menu-toggle { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
 .mobile-menu-toggle span { width: 25px; height: 3px; background: var(--text-white); transition: all .3s ease; }
 

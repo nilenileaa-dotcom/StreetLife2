@@ -53,12 +53,13 @@
       background: rgba(10, 10, 10, 0.98);
     }
     .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
-    .logo img { height: 60px; width: auto; transition: transform .3s ease; }
-    .logo img:hover { transform: scale(1.05); }
-    .nav-links { display: flex; list-style: none; gap: 2rem; }
-    .nav-links a {
-      color: var(--text-light); text-decoration: none; font-weight: 400; transition: all .3s ease; position: relative;
-    }
+ .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+.logo img { height: 60px; width: auto; transition: transform .3s ease; }
+.logo img:hover { transform: scale(1.05); }
+.nav-links { display: flex; list-style: none; gap: 2rem; }
+.nav-links a {
+  color: var(--text-light); text-decoration: none; font-weight: 400; transition: all .3s ease; position: relative;
+}
     .nav-links a:hover { color: var(--text-white); }
     .nav-links a::after {
       content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--text-white); transition: width .3s ease;
@@ -256,10 +257,10 @@
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
       .mobile-menu-toggle { display: flex; }
-      .nav-links {
-        position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10,10,10,.98);
-        flex-direction: column; padding: 2rem; transform: translateY(-100%); opacity: 0; visibility: hidden; transition: all .3s ease;
-      }
+  .nav-links {
+    position: absolute; top: 100%; left: 0; width: 100%; background: rgba(10,10,10,.98);
+    flex-direction: column; padding: 2rem; transform: translateY(-100%); opacity: 0; visibility: hidden; transition: all .3s ease;
+  }
       .nav-links.active { transform: translateY(0); opacity: 1; visibility: visible; }
       .navbar { padding: 1rem; }
       .hero { height: 30vh; margin-top: 70px; }
@@ -295,6 +296,7 @@
         <li><a href="index.html#features">Features</a></li>
         <li><a href="index.html#community">Community</a></li>
         <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="forums.html">Forums</a></li>
 <!-- Add Server Rules Button -->
 <a href="rules.html" class="rules-btn">
   <span class="btn-icon"></span>
